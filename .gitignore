@@ -6,6 +6,9 @@ lib-cov
 *.out
 *.pid
 *.gz
+*.sqlite
+*.sqlite3
+ass-pack
 
 pids
 logs
