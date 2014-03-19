@@ -1,3 +1,17 @@
 <%include part_head %>
-<%include part_asset_post %>
+<div id="asset-preview">
+	<img id="asset-preview-img" src="http://placehold.it/500x500">
+	<div id="asset-preview-description">
+		<div id="asset-preview-quick">
+			<div id="asset-preview-title"></div>
+			<div id="asset-preview-count"></div>
+			<div id="asset-preview-stars"></div>
+			<div class="clearfix"></div>
+		</div>
+		<div id="asset-preview-text"></div>
+	</div>
+</div>
+<% games.forEach(function(game) { %>
+	<%include part_asset_post %>
+<% }); %>
 <%include part_foot %>

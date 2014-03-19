@@ -81,7 +81,15 @@ OBG.listen(9001);
 //RoutingStart///////////////////////////////////////////////////////////////////////////
 //---------------------------------------------/////-landing page |home<--cookie-->admin|
 OBG.get('/', function (req, res){
-    res.render('home', {});
+    var obj = {
+        title:"N4m3-0f-G4m3",
+        count:9001,
+        stars:3,
+        image_url:"http://placehold.it/200x200",
+        page_url:"/game/id",
+        quick_text:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet massa purus. Vestibulum vitae pretium neque. Duis sit amet massa vitae nisl faucibus fermentum. Donec posuere in est sed pellentesque. In lorem erat, mattis a purus ac, lobortis ullamcorper tortor. Pellentesque cursus ullamcorper erat sit amet convallis. Sed viverra et ipsum vel rhoncus. Quisque faucibus sodales leo, et ornare nunc accumsan non. Integer vulputate odio non lorem pulvinar, eu euismod nulla dignissim. Nam laoreet justo ac purus malesuada mollis. Aliquam placerat turpis lectus, mollis egestas turpis tempor a. Ut a odio lacus. Aliquam erat volutpat. Cras faucibus a ligula id rhoncus."
+    };
+    res.render('home', {games:[obj]});
 });
 //
 OBG.get('/signin', function(req, res){

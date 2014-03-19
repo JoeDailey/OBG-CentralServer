@@ -1,0 +1,111 @@
+*{
+	box-sizing:border-box;
+}
+body{
+	background: url(/static/img/black_pattern01.jpg);
+}
+.asset{
+	margin-top: 10px;
+}
+	.asset-image{
+		width: 100%;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+	.asset-image img{
+		padding: 3px;
+		background: #3b9bef;
+		width: 100%;
+	}
+	.asset-trap-title{
+		border-bottom: 7px solid #3b9bef;
+		border-left: 5px solid transparent;
+		border-right: 5px solid transparent;
+		height: 0;
+		width: 100%;
+	}
+	.asset-title{
+		color:#283D5B;
+		font-size: 2em;
+		text-shadow: 1px 1px 0 #6598E4;
+		padding-left: 7px;
+		padding-right: 7px;
+		background: #3e7edd;
+		background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzNlN2VkZCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzNiOWJlZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzZTdlZGQiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+		background: -moz-linear-gradient(left,  #3e7edd 0%, #3b9bef 50%, #3e7edd 100%);
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%,#3e7edd), color-stop(50%,#3b9bef), color-stop(100%,#3e7edd));
+		background: -webkit-linear-gradient(left,  #3e7edd 0%,#3b9bef 50%,#3e7edd 100%);
+		background: -o-linear-gradient(left,  #3e7edd 0%,#3b9bef 50%,#3e7edd 100%);
+		background: -ms-linear-gradient(left,  #3e7edd 0%,#3b9bef 50%,#3e7edd 100%);
+		background: linear-gradient(to right,  #3e7edd 0%,#3b9bef 50%,#3e7edd 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3e7edd', endColorstr='#3e7edd',GradientType=1 );
+		position: relative;
+	}
+
+	.is-trap-subscribed{
+		border-bottom: 7px solid #4ee56c;
+	}
+	.is-subscribed{
+		background: #0cd63b;
+		color:#277236;
+		text-shadow: 1px 1px 0 #3DDE62;
+		background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBjZDYzYiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzRlZTU2YyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwY2Q2M2IiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+		background: -moz-linear-gradient(left, #0cd63b 0%, #4ee56c 50%, #0cd63b 100%);
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%,#0cd63b), color-stop(50%,#4ee56c), color-stop(100%,#0cd63b));
+		background: -webkit-linear-gradient(left, #0cd63b 0%,#4ee56c 50%,#0cd63b 100%);
+		background: -o-linear-gradient(left, #0cd63b 0%,#4ee56c 50%,#0cd63b 100%);
+		background: -ms-linear-gradient(left, #0cd63b 0%,#4ee56c 50%,#0cd63b 100%);
+		background: linear-gradient(to right, #0cd63b 0%,#4ee56c 50%,#0cd63b 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0cd63b', endColorstr='#0cd63b',GradientType=1 );
+	}
+
+	.asset-quick{
+		margin-left: 5px;
+		margin-right: 5px;
+		padding: 5px;
+		padding-right: 5px;
+		font-size: 1.3em;
+		color:white;
+		background: rgba(0,0,0,0.7);
+	}
+	.asset-description{
+		display: none;
+	}
+
+/*Asset Preview overlay*/
+#asset-preview{
+	display: none;
+	opacity: 0;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.95);
+	z-index: 100;
+}
+	#asset-preview-img{
+		position: fixed;
+		background: rgba(0,0,0,0.95);
+	}
+	#asset-preview-description{
+		padding: 10px;
+		color:white;
+		position: fixed;
+		bottom:0px;
+		width: 100%;	
+		background:rgba(0,0,0,0.8);
+	}
+		#asset-preview-title{
+			font-size: 2em;
+			float: left;
+		}
+		#asset-preview-count{
+			float: left;
+			color:#cccccc;
+		}
+		#asset-preview-text{
+			padding-left: 25px;
+		}
+		#asset-preview-stars{
+			float: right;
+			padding-right: 25px;
+		}
