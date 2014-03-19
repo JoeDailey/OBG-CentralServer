@@ -33,22 +33,24 @@ if (!exists) {
 //Set Up Start///////////////////////////////////////////////////////////////////////////
 //rendering///////////////////////////////////////////////////////////////////////////// 
 var express = require('express');
-var captifeye = express();
-captifeye.set('view engine', 'ejs');
+var OBG = express();
+OBG.set('view engine', 'ejs');
 //uuid/////////////////////////////////////////////////////////////////////////////////////
 var uuid = require('node-uuid');
 //file moving//////////////////////////////////////////////////////////////////////////////
 
 //email////////////////////////////////////////////////////////////////////////////////////
-captifeye.set("views", __dirname+'/views');
+OBG.set("views", __dirname+'/views');
 //path/////////////////////////////////////////////////////////////////////////////////////
-captifeye.use("/static", express.static(__dirname + '/static')); //static
+OBG.use("/static", express.static(__dirname + '/static')); //static
+//favicon//////////////////////////////////////////////////////////////////////////////////
+OBG.use(express.favicon(__dirname + '/static/img/favicon.png'));
 //cookies//////////////////////////////////////////////////////////////////////////////////
-captifeye.use(express.cookieParser('gamesandboardsandgames'));
-captifeye.use(express.session({secret: 'boardsandgamesandboards'}));
+OBG.use(express.cookieParser('gamesandboardsandgames'));
+OBG.use(express.session({secret: 'boardsandgamesandboards'}));
 //body parsing/////////////////////////////////////////////////////////////////////////////
-captifeye.use(express.bodyParser({uploadDir:__dirname + '/static/asspacks/temporary/'}));
-captifeye.set('view options', {
+OBG.use(express.bodyParser({uploadDir:__dirname + '/static/asspacks/temporary/'}));
+OBG.set('view options', {
     layout: false
 });
 //setup password encryption
@@ -73,15 +75,16 @@ var comparePassword = function (password, userPassword, callback) {
 };
 //start server
 
-captifeye.listen(9001);
+OBG.listen(9001);
 //Set Up End///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 //RoutingStart///////////////////////////////////////////////////////////////////////////
 //---------------------------------------------/////-landing page |home<--cookie-->admin|
-captifeye.get('/', function (req, res){
+OBG.get('/', function (req, res){
     res.render('home', {});
 });
-captifeye.get('/signin', function(req, res){
+//
+OBG.get('/signin', function(req, res){
     user = {
         name:"user_name",
         link:"/user/asdf"
@@ -90,7 +93,7 @@ captifeye.get('/signin', function(req, res){
     res.redirect('/');
 });
 //404 Error start/////////////////////////////////////////////////////////////////////////
-captifeye.get("*", function (req, res){
+OBG.get("*", function (req, res){
     res.render('front_error', {
         "errorNumber":404,
         "comment":"Sorry, you seem to have gone to page that does not exist."
