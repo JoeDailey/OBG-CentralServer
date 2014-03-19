@@ -1,0 +1,273 @@
+<style type="text/css">
+	body{
+		background: url(/static/img/black_pattern01.jpg);
+	}
+	.asset{
+		margin-top: 10px;
+	}
+	.asset-trap-title{
+		border-bottom: 7px solid #3b9bef;
+		border-left: 5px solid transparent;
+		border-right: 5px solid transparent;
+		height: 0;
+		width: 100%;
+	}
+	.asset-title{
+		color:#283D5B;
+		font-size: 2em;
+		text-shadow: 1px 1px 0 #6598E4;
+		padding-left: 7px;
+		padding-right: 7px;
+		background: #3e7edd;
+		background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzNlN2VkZCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzNiOWJlZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzZTdlZGQiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+		background: -moz-linear-gradient(left,  #3e7edd 0%, #3b9bef 50%, #3e7edd 100%);
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%,#3e7edd), color-stop(50%,#3b9bef), color-stop(100%,#3e7edd));
+		background: -webkit-linear-gradient(left,  #3e7edd 0%,#3b9bef 50%,#3e7edd 100%);
+		background: -o-linear-gradient(left,  #3e7edd 0%,#3b9bef 50%,#3e7edd 100%);
+		background: -ms-linear-gradient(left,  #3e7edd 0%,#3b9bef 50%,#3e7edd 100%);
+		background: linear-gradient(to right,  #3e7edd 0%,#3b9bef 50%,#3e7edd 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3e7edd', endColorstr='#3e7edd',GradientType=1 );
+		position: relative;
+	}
+	.asset-image{
+		width: 100%;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+	.asset-image img{
+		width: 100%;
+	}
+	.asset-trap-subscribe{
+		border-bottom: 7px solid #3b9bef;
+		border-left: 5px solid transparent;
+		border-right: 5px solid transparent;
+		height: 0;
+		width: 100%;
+	}
+	.asset-subscribe{
+		color:#283D5B;
+		font-size: 2em;
+		text-shadow: 1px 1px 0 #6598E4;
+		padding-left: 7px;
+		padding-right: 7px;
+		background: #3e7edd;
+		background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzNlN2VkZCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzNiOWJlZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzZTdlZGQiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+		background: -moz-linear-gradient(left,  #3e7edd 0%, #3b9bef 50%, #3e7edd 100%);
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%,#3e7edd), color-stop(50%,#3b9bef), color-stop(100%,#3e7edd));
+		background: -webkit-linear-gradient(left,  #3e7edd 0%,#3b9bef 50%,#3e7edd 100%);
+		background: -o-linear-gradient(left,  #3e7edd 0%,#3b9bef 50%,#3e7edd 100%);
+		background: -ms-linear-gradient(left,  #3e7edd 0%,#3b9bef 50%,#3e7edd 100%);
+		background: linear-gradient(to right,  #3e7edd 0%,#3b9bef 50%,#3e7edd 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3e7edd', endColorstr='#3e7edd',GradientType=1 );
+		position: relative;
+	}
+
+	.is-trap-subscribed{
+		border-bottom: 7px solid #4ee56c;
+	}
+	.is-subscribed{
+		background: #0cd63b;
+		color:#277236;
+		text-shadow: 1px 1px 0 #3DDE62;
+		background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBjZDYzYiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzRlZTU2YyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwY2Q2M2IiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+		background: -moz-linear-gradient(left, #0cd63b 0%, #4ee56c 50%, #0cd63b 100%);
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%,#0cd63b), color-stop(50%,#4ee56c), color-stop(100%,#0cd63b));
+		background: -webkit-linear-gradient(left, #0cd63b 0%,#4ee56c 50%,#0cd63b 100%);
+		background: -o-linear-gradient(left, #0cd63b 0%,#4ee56c 50%,#0cd63b 100%);
+		background: -ms-linear-gradient(left, #0cd63b 0%,#4ee56c 50%,#0cd63b 100%);
+		background: linear-gradient(to right, #0cd63b 0%,#4ee56c 50%,#0cd63b 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0cd63b', endColorstr='#0cd63b',GradientType=1 );
+	}
+
+	.asset-description{
+		padding-left: 5px;
+		padding-right: 5px;
+		display: none;
+	}
+	.asset-description p{
+		padding: 5px;
+		font-size: 1.3em;
+		color:white;
+		background: rgba(0,0,0,0.7);
+	}
+
+</style>
+<script>
+	$(document).ready(function(){
+		$(".asset-title").click(function(){
+			$($(this).parent()).css("opacity", "0.0");
+			$("#asset-preview").show(0);
+			
+			$("#asset-preview-img").removeAttr("style");
+
+			var screenH = $(window).height();
+			var screenW = $(window).width();
+			var imgH = $("#asset-preview-img").height();
+			var imgW = $("#asset-preview-img").width();
+
+			var asset_image = $($($(this).parent()).children(".asset-image"));
+			$("#asset-preview-img").css({
+				"left":asset_image.offset().left,
+				"top":asset_image.offset().top,
+				"width":asset_image.width()
+			});
+
+			if(imgW/screenW < imgH/imgW){
+				var NimgH = $(window).height()-20;
+				var NimgW = NimgH * imgW / imgH;
+
+				$("#asset-preview-img").animate({
+					"height": NimgH + "px",
+					"width": NimgW + "px",
+					"top":"10px",
+					"left":(screenW-NimgW)/2
+				});
+				console.log(imgH + " " + imgW);
+			}else{
+				var NimgW = $(window).width()-20;
+				var NimgH = NimgW * imgH / imgW;
+
+				$("#asset-preview-img").animate({
+					"width": NimgW + "px",
+					"height": NimgH + "px",
+					"left":"10px",
+					"top":(screenH-NimgH)/2
+				});
+			}
+			$("#asset-preview").css("opacity", "1.0");
+		});
+		$(window).keyup(function(e){
+			if(e.keyCode === 27) closePreview();
+		});
+	});
+	var closePreview = function(){
+		$("#asset-preview").removeAttr("style");
+		$(".asset").removeAttr("style");
+	}
+</script>
+<style type="text/css">
+	#asset-preview{
+		display: none;
+		opacity: 0;
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.95);
+		z-index: 1000;
+	}
+	#asset-preview-img{
+		position: fixed;
+		background: rgba(0,0,0,0.95);
+		z-index: 1000;
+	}
+</style>
+<div id="asset-preview">
+	<img id="asset-preview-img" src="http://placehold.it/500x500">
+</div>
+<div class="asset col-lg-3 col-md-4 col-sm-6 col-xs-12">
+	<div class='asset-trap-title'></div>
+	<div class="asset-title">N4m3-0f-G4m3</div>
+	<div class="asset-image">
+		<img src="http://placehold.it/100x100">
+	</div>
+	<div class='asset-trap-subscribe'></div>
+	<div class="asset-subscribe">subscribe?</div>
+	<div class="asset-description"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet massa purus. Vestibulum vitae pretium neque. Duis sit amet massa vitae nisl faucibus fermentum. Donec posuere in est sed pellentesque. In lorem erat, mattis a purus ac, lobortis ullamcorper tortor. Pellentesque cursus ullamcorper erat sit amet convallis. Sed viverra et ipsum vel rhoncus. Quisque faucibus sodales leo, et ornare nunc accumsan non. Integer vulputate odio non lorem pulvinar, eu euismod nulla dignissim. Nam laoreet justo ac purus malesuada mollis. Aliquam placerat turpis lectus, mollis egestas turpis tempor a. Ut a odio lacus. Aliquam erat volutpat. Cras faucibus a ligula id rhoncus.</p></div>
+</div>
+<div class="asset col-lg-3 col-md-4 col-sm-6 col-xs-12">
+	<div class='asset-trap-title is-trap-subscribed'></div>
+	<div class="asset-title is-subscribed">N4m3-0f-G4m3</div>
+	<div class="asset-image">
+		<img src="http://placehold.it/100x100">
+	</div>
+	<div class="asset-trap-subscribe is-trap-subscribed"></div>
+	<div class="asset-subscribe is-subscribed">subscribe?
+		
+	</div>
+	<div class="asset-description"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet massa purus. Vestibulum vitae pretium neque. Duis sit amet massa vitae nisl faucibus fermentum. Donec posuere in est sed pellentesque. In lorem erat, mattis a purus ac, lobortis ullamcorper tortor. Pellentesque cursus ullamcorper erat sit amet convallis. Sed viverra et ipsum vel rhoncus. Quisque faucibus sodales leo, et ornare nunc accumsan non. Integer vulputate odio non lorem pulvinar, eu euismod nulla dignissim. Nam laoreet justo ac purus malesuada mollis. Aliquam placerat turpis lectus, mollis egestas turpis tempor a. Ut a odio lacus. Aliquam erat volutpat. Cras faucibus a ligula id rhoncus.</p></div>
+</div>
+<div class="asset col-lg-3 col-md-4 col-sm-6 col-xs-12">
+	<div class='asset-trap-title is-trap-subscribed'></div>
+	<div class="asset-title is-subscribed">N4m3-0f-G4m3</div>
+	<div class="asset-image">
+		<img src="http://placehold.it/100x100">
+	</div>
+	<div class="asset-trap-subscribe is-trap-subscribed"></div>
+	<div class="asset-subscribe is-subscribed">subscribe?
+		
+	</div>
+	<div class="asset-description"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet massa purus. Vestibulum vitae pretium neque. Duis sit amet massa vitae nisl faucibus fermentum. Donec posuere in est sed pellentesque. In lorem erat, mattis a purus ac, lobortis ullamcorper tortor. Pellentesque cursus ullamcorper erat sit amet convallis. Sed viverra et ipsum vel rhoncus. Quisque faucibus sodales leo, et ornare nunc accumsan non. Integer vulputate odio non lorem pulvinar, eu euismod nulla dignissim. Nam laoreet justo ac purus malesuada mollis. Aliquam placerat turpis lectus, mollis egestas turpis tempor a. Ut a odio lacus. Aliquam erat volutpat. Cras faucibus a ligula id rhoncus.</p></div>
+</div>
+<div class="asset col-lg-3 col-md-4 col-sm-6 col-xs-12">
+	<div class='asset-trap-title is-trap-subscribed'></div>
+	<div class="asset-title is-subscribed">N4m3-0f-G4m3</div>
+	<div class="asset-image">
+		<img src="http://placehold.it/100x100">
+	</div>
+	<div class="asset-trap-subscribe is-trap-subscribed"></div>
+	<div class="asset-subscribe is-subscribed">subscribe?
+		
+	</div>
+	<div class="asset-description"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet massa purus. Vestibulum vitae pretium neque. Duis sit amet massa vitae nisl faucibus fermentum. Donec posuere in est sed pellentesque. In lorem erat, mattis a purus ac, lobortis ullamcorper tortor. Pellentesque cursus ullamcorper erat sit amet convallis. Sed viverra et ipsum vel rhoncus. Quisque faucibus sodales leo, et ornare nunc accumsan non. Integer vulputate odio non lorem pulvinar, eu euismod nulla dignissim. Nam laoreet justo ac purus malesuada mollis. Aliquam placerat turpis lectus, mollis egestas turpis tempor a. Ut a odio lacus. Aliquam erat volutpat. Cras faucibus a ligula id rhoncus.</p></div>
+</div>
+<div class="asset col-lg-3 col-md-4 col-sm-6 col-xs-12">
+	<div class='asset-trap-title is-trap-subscribed'></div>
+	<div class="asset-title is-subscribed">N4m3-0f-G4m3</div>
+	<div class="asset-image">
+		<img src="http://placehold.it/100x100">
+	</div>
+	<div class="asset-trap-subscribe is-trap-subscribed"></div>
+	<div class="asset-subscribe is-subscribed">subscribe?
+		
+	</div>
+	<div class="asset-description"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet massa purus. Vestibulum vitae pretium neque. Duis sit amet massa vitae nisl faucibus fermentum. Donec posuere in est sed pellentesque. In lorem erat, mattis a purus ac, lobortis ullamcorper tortor. Pellentesque cursus ullamcorper erat sit amet convallis. Sed viverra et ipsum vel rhoncus. Quisque faucibus sodales leo, et ornare nunc accumsan non. Integer vulputate odio non lorem pulvinar, eu euismod nulla dignissim. Nam laoreet justo ac purus malesuada mollis. Aliquam placerat turpis lectus, mollis egestas turpis tempor a. Ut a odio lacus. Aliquam erat volutpat. Cras faucibus a ligula id rhoncus.</p></div>
+</div>
+<div class="asset col-lg-3 col-md-4 col-sm-6 col-xs-12">
+	<div class='asset-trap-title is-trap-subscribed'></div>
+	<div class="asset-title is-subscribed">N4m3-0f-G4m3</div>
+	<div class="asset-image">
+		<img src="http://placehold.it/100x100">
+	</div>
+	<div class="asset-trap-subscribe is-trap-subscribed"></div>
+	<div class="asset-subscribe is-subscribed">subscribe?
+		
+	</div>
+	<div class="asset-description"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet massa purus. Vestibulum vitae pretium neque. Duis sit amet massa vitae nisl faucibus fermentum. Donec posuere in est sed pellentesque. In lorem erat, mattis a purus ac, lobortis ullamcorper tortor. Pellentesque cursus ullamcorper erat sit amet convallis. Sed viverra et ipsum vel rhoncus. Quisque faucibus sodales leo, et ornare nunc accumsan non. Integer vulputate odio non lorem pulvinar, eu euismod nulla dignissim. Nam laoreet justo ac purus malesuada mollis. Aliquam placerat turpis lectus, mollis egestas turpis tempor a. Ut a odio lacus. Aliquam erat volutpat. Cras faucibus a ligula id rhoncus.</p></div>
+</div>
+<div class="asset col-lg-3 col-md-4 col-sm-6 col-xs-12">
+	<div class='asset-trap-title is-trap-subscribed'></div>
+	<div class="asset-title is-subscribed">N4m3-0f-G4m3</div>
+	<div class="asset-image">
+		<img src="http://placehold.it/100x100">
+	</div>
+	<div class="asset-trap-subscribe is-trap-subscribed"></div>
+	<div class="asset-subscribe is-subscribed">subscribe?
+		
+	</div>
+	<div class="asset-description"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet massa purus. Vestibulum vitae pretium neque. Duis sit amet massa vitae nisl faucibus fermentum. Donec posuere in est sed pellentesque. In lorem erat, mattis a purus ac, lobortis ullamcorper tortor. Pellentesque cursus ullamcorper erat sit amet convallis. Sed viverra et ipsum vel rhoncus. Quisque faucibus sodales leo, et ornare nunc accumsan non. Integer vulputate odio non lorem pulvinar, eu euismod nulla dignissim. Nam laoreet justo ac purus malesuada mollis. Aliquam placerat turpis lectus, mollis egestas turpis tempor a. Ut a odio lacus. Aliquam erat volutpat. Cras faucibus a ligula id rhoncus.</p></div>
+</div>
+<div class="asset col-lg-3 col-md-4 col-sm-6 col-xs-12">
+	<div class='asset-trap-title is-trap-subscribed'></div>
+	<div class="asset-title is-subscribed">N4m3-0f-G4m3</div>
+	<div class="asset-image">
+		<img src="http://placehold.it/100x100">
+	</div>
+	<div class="asset-trap-subscribe is-trap-subscribed"></div>
+	<div class="asset-subscribe is-subscribed">subscribe?
+		
+	</div>
+	<div class="asset-description"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet massa purus. Vestibulum vitae pretium neque. Duis sit amet massa vitae nisl faucibus fermentum. Donec posuere in est sed pellentesque. In lorem erat, mattis a purus ac, lobortis ullamcorper tortor. Pellentesque cursus ullamcorper erat sit amet convallis. Sed viverra et ipsum vel rhoncus. Quisque faucibus sodales leo, et ornare nunc accumsan non. Integer vulputate odio non lorem pulvinar, eu euismod nulla dignissim. Nam laoreet justo ac purus malesuada mollis. Aliquam placerat turpis lectus, mollis egestas turpis tempor a. Ut a odio lacus. Aliquam erat volutpat. Cras faucibus a ligula id rhoncus.</p></div>
+</div>
+<div class="asset col-lg-3 col-md-4 col-sm-6 col-xs-12">
+	<div class='asset-trap-title is-trap-subscribed'></div>
+	<div class="asset-title is-subscribed">N4m3-0f-G4m3</div>
+	<div class="asset-image">
+		<img src="http://placehold.it/100x100">
+	</div>
+	<div class="asset-trap-subscribe is-trap-subscribed"></div>
+	<div class="asset-subscribe is-subscribed">subscribe?
+		
+	</div>
+	<div class="asset-description"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet massa purus. Vestibulum vitae pretium neque. Duis sit amet massa vitae nisl faucibus fermentum. Donec posuere in est sed pellentesque. In lorem erat, mattis a purus ac, lobortis ullamcorper tortor. Pellentesque cursus ullamcorper erat sit amet convallis. Sed viverra et ipsum vel rhoncus. Quisque faucibus sodales leo, et ornare nunc accumsan non. Integer vulputate odio non lorem pulvinar, eu euismod nulla dignissim. Nam laoreet justo ac purus malesuada mollis. Aliquam placerat turpis lectus, mollis egestas turpis tempor a. Ut a odio lacus. Aliquam erat volutpat. Cras faucibus a ligula id rhoncus.</p></div>
+</div>
+
