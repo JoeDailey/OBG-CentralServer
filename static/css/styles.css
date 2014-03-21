@@ -4,6 +4,17 @@
 body{
 	background: url(/static/img/black_pattern01.jpg);
 }
+@media (min-width: 768px) {
+	.right-bottom-edge{
+		border-right: 1px solid black;
+	}
+}
+@media (max-width: 768px) {
+	.right-bottom-edge{
+		border-bottom: 1px solid black;
+	}
+}
+/*assets*/
 .asset{
 	margin-top: 10px;
 }
