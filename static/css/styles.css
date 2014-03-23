@@ -52,6 +52,9 @@ body{
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3e7edd', endColorstr='#3e7edd',GradientType=1 );
 		position: relative;
 	}
+	.asset-title a{
+		color:#283D5B;
+	}
 
 	.is-trap-subscribed{
 		border-bottom: 7px solid #4ee56c;

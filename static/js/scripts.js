@@ -1,5 +1,7 @@
 
 $(document).ready(function(){
+	$('input[type=file]').bootstrapFileInput();
+	$("input[type=checkbox]").bootstrapSwitch();
 	$(".asset-image").click(function(){
 		$($(this).parent()).css("opacity", "0.0");
 		$("#asset-preview").show(0);

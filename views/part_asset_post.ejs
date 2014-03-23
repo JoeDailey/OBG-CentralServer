@@ -3,9 +3,9 @@
 		<img src="<%= game.image_url %>">
 	</div>
 	<div class='asset-trap-title'></div>
-	<div class="asset-title"><%= game.title %></div>
+	<div class="asset-title"><a href="/game/<%= game.asset_pack_id %>"><%= game.asset_pack_name %></a></div>
 	<div class="asset-quick">
-		<div class="asset-count"><%= game.count %></div>
+		<div class="asset-count"><%= game.count %> Subscription<%= (game.count===1)? '':'s' %></div>
 		<div class="asset-stars">
 			<% for(var i = 0; i < game.stars; ++i) { %>
 				<span class='glyphicon glyphicon-star'></span>
@@ -16,5 +16,5 @@
 		</div>
 		<div class="clearfix"></div>
 	</div>
-	<div class="asset-description"><p><%= game.quick_text %></p></div>
+	<div class="asset-description"><p><%= game.description %></p></div>
 </div>

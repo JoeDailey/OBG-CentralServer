@@ -1,0 +1,133 @@
+<%include part_head %>
+<div class="container">
+    <div id="slides">
+
+		<% game.images.forEach(function(image) { %>
+			<img src="<%= image.image_url %>">
+		<% }); %>
+
+		<a href="#" class="slidesjs-previous slidesjs-navigation"><span class="glyphicon glyphicon-chevron-left"></span></a>
+		<a href="#" class="slidesjs-next slidesjs-navigation"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div>
+    <div id="img-list" style="display:none;">
+    	<% for (var i = 0; i < game.images.length; i++) { %>
+			<span><%= game.images[i].image_url %></span>
+		<% } %>
+	</div>
+	<div id="info">
+		<div id="top-info">
+			<div id="top-name">
+				<h1><%= game.asset_pack_name %></h1>
+			</div>
+			<div id="top-attr">
+				<div id="attr-toggle">
+					<form>
+						<input type="checkbox" name="subscribe" class="is_subscribed" data-on-color="success" data-off-color="default" <%= (game.is_subbed==true)? 'checked' : '' %>>
+					</form>
+				</div>
+				<div id="attr-info">
+					<% for(var i = 0; i < game.stars; ++i) { %>
+						<span class='glyphicon glyphicon-star'></span>
+					<% } %>
+					<% for(var i = 0; i < 5 - game.stars; ++i) { %>
+						<span class='glyphicon glyphicon-star-empty'></span>
+					<% } %>
+					<div class="asset-count"><%= game.count %> Subscription<%= (game.count===1)? '':'s' %></div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<h2>About</h2>
+		<p style="padding:10px;"><%= game.description %></p>
+	</div>
+</div>
+<style type="text/css">
+	#info{
+		padding: 20px;
+		color: white;
+		margin-top: 10px;
+		background-color: rgba(0,0,0,0.7);	
+	}
+	#top-name{
+		float: left;
+	}
+	#top-attr{
+		margin-top: 20px;
+		float: right;
+		margin-bottom: 10px;
+	}
+	#attr-toggle{
+		padding-top: 7px;
+		margin-right: 10px;
+		float: left;
+	}
+	#attr-info{
+		float: right;
+	}
+	.slidesjs-navigation{
+		font-size: 2em;
+		float:left;
+		height: 100px;
+		background-color: rgba(0,0,0,0.1);
+		color: rgba(255,255,255,0.7);
+		line-height: 4em;
+		margin-top: 10px;
+	}
+	.slidesjs-pagination{
+		padding-top: 10px;
+		margin-bottom: 0px;
+	}
+	.slidesjs-pagination-item{
+		height: 100px;
+		float: left;
+		list-style-type:none;
+		background-color: gray;
+		padding: 2px;
+		margin-right: 7px;
+		margin-top: 5px;
+	}
+	.slidesjs-pagination-item img{
+		height: 100%;
+	}
+	.slidesjs-previous{
+		margin-right: 7px;
+	}
+	.slidesjs-navigation:hover{
+		background-color: rgba(0,0,0,0.9);
+		color: white;
+	}
+	.slidesjs-next{
+		float:right;
+	}
+	.backdrop{
+		background-color: rgba(0,0,0,0.7);
+		border-bottom: solid 5px rgba(0,0,0,0.7);
+	}
+</style>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.is_subscribed').on('switchChange', function (e, data) {
+			var $element = $(data.el),
+			value = data.value;
+			console.log("fuck");
+			console.log(e, $element, value);
+		});
+		var imgs = new Array();
+		var imglist = $("#img-list").children();
+		for (var i = 0; i < imglist.length; i++) {
+			imgs[i] = $(imglist[i]).text();
+		};
+			console.log(imgs);
+		$('#slides').slidesjs({
+			width: 940,
+			height: 528,
+			navigation:false
+		});
+		var props = $('.slidesjs-pagination').children();
+		for (var i = 0; i < props.length; i++) {
+			$(props[i].children[0]).html("<img src='"+imgs[i]+"'>");
+		};
+	});
+</script>
+<%include part_foot %>

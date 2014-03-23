@@ -1,0 +1,74 @@
+<%include part_head %>
+	<div class="content" style="padding:20px;">
+		<div class="well col-sm-12 col-xs-12" >
+			<form class="form-group" action="/asset" method="post" enctype="multipart/form-data">
+				<h3>Game Name</h3>
+				<input class="form-control" name="ass_name">
+				<h3>Game Description</h3>
+				<input class="form-control" name="ass_desc">
+				<h3>Asset Pack (.asspk)</h3>
+				<input type="file" id="ass_pk" class="form-control" name="ass_pk">
+				<input type="text" class="form-control" id="ass_imgs" name="ass_imgs" style="display:none;">
+				<input type="submit" class="btn btn-primary pull-right" >
+			</form>
+			<form id="imageform" action="/image" method="post">
+				<h3>Images</h3>
+				<input type="file" name="image" id="image_in" class="form-control">
+			</form>
+			<div id="imagesPreview" class="well">
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<style type="text/css">
+	#imagesPreview{
+		margin-top: 7px;
+	}
+	.imagePreview{
+		float: left;
+		height: 100px;
+		width: 100px;
+		background-size: cover!important;
+		border: solid 2px gray;
+		margin-right: 10px;
+	}
+	.imagePreview span{
+		color: white;
+		height: 100%;
+		width: 100%;
+		font-size: 2em;
+		text-align: right;
+		text-shadow: 3px 3px black;
+	}
+	</style>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#imageform').ajaxForm();
+			$("#image_in").on('change',function(e){
+				console.log("lalalal");
+				var form = $('#imageform').ajaxSubmit();
+				var xhr = form.data('jqxhr');
+				xhr.success(function(a) {
+					$("#imagesPreview").prepend($('<div class="imagePreview" style="background:url('+a.url+');"><span class="glyphicon glyphicon-remove remove-image"></span></div>'));
+					$("#ass_imgs").val($("#ass_imgs").val()+"!"+a.url);
+					console.log($("#ass_imgs").val());
+					$("#image_in").val("");
+					$(".remove-image").click(function(){
+						var ip = $(this).parent();
+						$.ajax({
+				            url: '/delimage',
+				            type: "POST",
+				            data:{
+				            	image:ip.css("background-image").replace("url(", "").replace(")", "").replace("http://localhost:9001", "")
+				            },
+				            dataType: "json"
+				        });
+						ip.remove();
+					});
+				});
+			});
+			
+		});
+	</script>
+<%include part_foot %>
