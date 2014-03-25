@@ -17,21 +17,20 @@ var sqlite3 = require("sqlite3").verbose();
 var db = new sqlite3.Database(file);
 if (!exists) {
 	db.serialize(function () {
-		var dberr = "no error";
-		db.run('CREATE TABLE "users" ("user_id" Integer Primary Key NOT NULL UNIQUE, "user_email" blob NOT NULL, "user_name" blob NOT NULL, "activated" boolean NOT NULL DEFAULT false, "created_at" DATETIME NOT NULL  DEFAULT CURRENT_TIMESTAMP));', function(err){ if(err) dberr = err; });
-		db.run('CREATE TABLE "passwords" ("user_id" Integer NOT NULL UNIQUE, "hash" blob NOT NULL);', function(err){ if(err) dberr = err; });
-		db.run('CREATE TABLE "asset_packs" ("asset_pack_id" blob NOT NULL, "asset_pack_name" blob NOT NULL, "user_id" Integer NOT NULL, "description" blob, "created_at" DATETIME NOT NULL  DEFAULT CURRENT_TIMESTAMP));', function(err){ if(err) dberr = err; });
-		db.run('CREATE TABLE "asset_version" ("asset_version_id" integer Primary Key  NOT NULL, "asset_pack_id" blob NOT NULL, "asset_url" blob NOT NULL, "change_log" blob, "version" real NOT NULL, "created_at" DATETIME NOT NULL  DEFAULT CURRENT_TIMESTAMP));', function(err){ if(err) dberr = err; })
-		db.run('CREATE TABLE "subscriptions" ("user_id" Integer NOT NULL, "asset_pack_id" blob NOT NULL, "asset_version_id" integer);', function(err){ if(err) dberr = err; });
-		db.run('CREATE TABLE "stars" ("user_id" Integer NOT NULL, "asset_pack_id" blob NOT NULL, "rating" integer NOT NULL);', function(err){ if(err) dberr = err; });
-		db.run('CREATE TABLE "images" ("user_id" Integer NOT NULL, "asset_pack_id" blob NOT NULL, "image_url" blob NOT NULL);', function(err){ if(err) dberr = err; });
-		if(dberr!="no error"){
-			console.log(dberr);
-			fs.unlink(file);
-		}else{
-			console.log("no error creating database");
-		}
+		db.run('CREATE TABLE "users" ("user_id" Integer Primary Key NOT NULL UNIQUE, "user_email" blob NOT NULL, "user_name" blob NOT NULL, "activated" boolean NOT NULL DEFAULT false, "created_at" DATETIME NOT NULL  DEFAULT CURRENT_TIMESTAMP);', function(err){ if("users", err) dberror(err); });
+		db.run('CREATE TABLE "passwords" ("user_id" Integer NOT NULL UNIQUE, "hash" blob NOT NULL);', function(err){ if(err) dberror("passwords", err); });
+		db.run('CREATE TABLE "asset_packs" ("asset_pack_id" blob NOT NULL, "asset_pack_name" blob NOT NULL, "user_id" Integer NOT NULL, "description" blob, "created_at" DATETIME NOT NULL  DEFAULT CURRENT_TIMESTAMP);', function( err){ if("asset_packs", err) dberror(err); });
+		db.run('CREATE TABLE "asset_version" ("asset_version_id" integer Primary Key  NOT NULL, "asset_pack_id" blob NOT NULL, "asset_url" blob NOT NULL, "change_log" blob, "version" real NOT NULL, "created_at" DATETIME NOT NULL  DEFAULT CURRENT_TIMESTAMP);', function(err){ if("asset_Versions", err) dberror(err); })
+		db.run('CREATE TABLE "subscriptions" ("user_id" Integer NOT NULL, "asset_pack_id" blob NOT NULL, "asset_version_id" integer);', function(err){ if(err) dberror("subscriptions", err); });
+		db.run('CREATE TABLE "stars" ("user_id" Integer NOT NULL, "asset_pack_id" blob NOT NULL, "rating" integer NOT NULL);', function(err){ if(err) dberror("stars", err); });
+		db.run('CREATE TABLE "images" ("user_id" Integer NOT NULL, "asset_pack_id" blob NOT NULL, "image_url" blob NOT NULL);', function(err){ if(err) dberror("images", err); });
 	});
+}
+var dberror = function(table, err){
+	console.log(table, err);
+	console.log("deleting " + file);
+	if(fs.existsSync(file))
+		fs.unlink(file);
 }
 /////////END CREATE DATABASE
 //Database End/////////////////////////////////////////////////////////////////////////////
@@ -98,20 +97,11 @@ OBG.listen(9001);
 //RoutingStart///////////////////////////////////////////////////////////////////////////
 //--------------------------------------------------------------------/////-landing page
 OBG.get('/', function (req, res){
-	// var obj = {
-	// 	title:"N4m3-0f-G4m3",
-	// 	count:9001,
-	// 	stars:3,
-	// 	image_url:"http://placehold.it/200x200",
-	// 	page_url:"/game/id",
-	// 	quick_text:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet massa purus. Vestibulum vitae pretium neque. Duis sit amet massa vitae nisl faucibus fermentum. Donec posuere in est sed pellentesque. In lorem erat, mattis a purus ac, lobortis ullamcorper tortor. Pellentesque cursus ullamcorper erat sit amet convallis. Sed viverra et ipsum vel rhoncus. Quisque faucibus sodales leo, et ornare nunc accumsan non. Integer vulputate odio non lorem pulvinar, eu euismod nulla dignissim. Nam laoreet justo ac purus malesuada mollis. Aliquam placerat turpis lectus, mollis egestas turpis tempor a. Ut a odio lacus. Aliquam erat volutpat. Cras faucibus a ligula id rhoncus."
-	// };
 	db.all("SELECT asset_packs.*, img.image_url FROM asset_packs LEFT JOIN (SELECT * FROM images LIMIT 1) AS img ON asset_packs.asset_pack_id=img.asset_pack_id", function(err, ass_pks){	
-		console.log(ass_pks[0]);
+		if(err || ass_pks==undefined){res.render("home", mergeUser(req.signedCookies.user, {nav:"Popular", games:[]})); return;};
 		for (var a = 0; a < ass_pks.length; a++) {
 			var i = a;
 			db.all("SELECT * FROM stars WHERE asset_pack_id='"+ass_pks[i].asset_pack_id+"';",function(err, stars){
-				
 				var starsVal = 0;
 				for (var s = 0; s < stars.length; s++) {
 					console.log("i-sloop"+s+": "+i);
@@ -120,10 +110,12 @@ OBG.get('/', function (req, res){
 				ass_pks[i].stars = Math.floor(starsVal/stars.length);
 				db.all("SELECT user_id FROM subscriptions WHERE asset_pack_id='"+ass_pks[i].asset_pack_id+"';", function(err, subs){
 					var is_subbed = false;
-					// var user_id = JSON.parse(req.signedCookies.user).user_id;
-					// for (var sub = 0; sub < subs.length; sub++)
-					// 	if(subs[sub].user_id == user_id)
-					// 		is_subbed = true;
+					if(req.signedCookies.user != undefined){
+						var user_id = JSON.parse(req.signedCookies.user).user_id;
+						for (var sub = 0; sub < subs.length; sub++)
+							if(subs[sub].user_id == user_id)
+								is_subbed = true;
+					}
 					ass_pks[i].is_subbed = is_subbed;
 					ass_pks[i].count = subs.length;
 					
