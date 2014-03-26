@@ -20,7 +20,7 @@ Instructions:
 
 	Run server:
 
-		$ node server.js
+		$ node OBG.js
 
 	Use server:
 
