@@ -16,30 +16,36 @@
 	</div>
 	<div id="info">
 		<div id="top-info">
-			<div id="top-name">
+			<div id="top-name" class="col-md-6 col-sm-12">
 				<h1><%= game.asset_pack_name %></h1>
 			</div>
-			<div id="top-attr">
-				<div id="attr-toggle">
-					<form>
-						<input type="checkbox" name="subscribe" class="is_subscribed" data-on-color="success" data-off-color="default" <%= (game.is_subbed==true)? 'checked' : '' %>>
-					</form>
-				</div>
-				<div id="attr-info">
+			<div id="top-attr" class="col-md-6 col-sm-12" style="float:right;margin-top:15px;">
+				<div id="attr-info" >
 					<% for(var i = 0; i < game.stars; ++i) { %>
-						<span class='glyphicon glyphicon-star'></span>
+						<span class='glyphicon glyphicon-star star'></span>
 					<% } %>
 					<% for(var i = 0; i < 5 - game.stars; ++i) { %>
-						<span class='glyphicon glyphicon-star-empty'></span>
+						<span class='glyphicon glyphicon-star-empty star'></span>
 					<% } %>
 					<div class="asset-count"><%= game.count %> Subscription<%= (game.count===1)? '':'s' %></div>
+				</div>
+				<div id="is_subbed">
+					<label class="switch-light switch-candy sub_switch" style="margin-top:3px;" onclick="">
+						<input type="checkbox" <%= (game.is_subbed==true)? 'checked' : '' %>>
+						<span>
+							<span>Off</span>
+							<span>On</span>
+						</span>
+
+						<a></a>
+					</label>
 				</div>
 				<div class="clearfix"></div>
 			</div>
 			<div class="clearfix"></div>
 		</div>
 		<h2>About</h2>
-		<p style="padding:10px;"><%= game.description %></p>
+		<p style="padding:10px;width:100%;"><%= game.description %></p>
 	</div>
 </div>
 <style type="text/css">
@@ -49,21 +55,23 @@
 		margin-top: 10px;
 		background-color: rgba(0,0,0,0.7);	
 	}
-	#top-name{
-		float: left;
-	}
-	#top-attr{
-		margin-top: 20px;
-		float: right;
-		margin-bottom: 10px;
-	}
-	#attr-toggle{
-		padding-top: 7px;
-		margin-right: 10px;
-		float: left;
-	}
 	#attr-info{
-		float: right;
+		float: right!important;
+	}
+	#is_subbed{
+		width: 300px;
+		float:right;
+		margin-right: 7px;
+		cursor: pointer;
+	}
+	#is_subbed label{
+		margin-left:7px!important;
+	}
+	.star{
+		cursor: pointer;
+	}
+	.star:hover ~ .star{
+		color: #999;
 	}
 	.slidesjs-navigation{
 		font-size: 2em;
@@ -107,12 +115,37 @@
 </style>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('.is_subscribed').on('switchChange', function (e, data) {
-			var $element = $(data.el),
-			value = data.value;
-			console.log("fuck");
-			console.log(e, $element, value);
+		var is_subbed = <%= (game.is_subbed==true)? 'true' : 'false' %>;
+		var clickable = 0;
+		$(".sub_switch span").click(function(){
+			if(clickable == 2) return false;
+				clickable++;
+			if(clickable==1){
+				console.log("double?");
+				is_subbed = !is_subbed;
+				var subbed = "unsubscribe";
+				if(is_subbed)
+					subbed = "subscribe";
+
+				var timeout = setTimeout(function(){
+					clickable = 0;
+				}, 200);
+				$.ajax({
+					url:"/api/"+subbed,
+					type:"POST",
+					data:{
+						ass_pk_id:"<%= game.asset_pack_id %>"
+					},
+					error:function(err, status){t
+						// is_subbed = !is_subbed;
+						// $(".sub_switch").click();
+						clearTimeout(timeout);
+						clickable = 0;
+					}
+				});
+			}
 		});
+
 		var imgs = new Array();
 		var imglist = $("#img-list").children();
 		for (var i = 0; i < imglist.length; i++) {

@@ -6,11 +6,17 @@ lib-cov
 *.out
 *.pid
 *.gz
-ass-pack
+db.sqlite
 
 pids
 logs
 results
 
+static/ass_img/*
+!static/ass_img/.keep
+static/ass_pks/*
+!static/ass_pks/.keep
+static/tmp/*
+!static/tmp/.keep
 npm-debug.log
 node_modules

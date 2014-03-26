@@ -98,10 +98,11 @@ OBG.listen(9001);
 //--------------------------------------------------------------------/////-landing page
 OBG.get('/', function (req, res){
 	db.all("SELECT asset_packs.*, img.image_url FROM asset_packs LEFT JOIN (SELECT * FROM images LIMIT 1) AS img ON asset_packs.asset_pack_id=img.asset_pack_id", function(err, ass_pks){	
-		if(err || ass_pks==undefined){res.render("home", mergeUser(req.signedCookies.user, {nav:"Popular", games:[]})); return;};
+		if(err || ass_pks==undefined || ass_pks.length==0){res.render("home", mergeUser(req.signedCookies.user, {nav:"Popular", games:[]})); return;};
 		for (var a = 0; a < ass_pks.length; a++) {
 			var i = a;
 			db.all("SELECT * FROM stars WHERE asset_pack_id='"+ass_pks[i].asset_pack_id+"';",function(err, stars){
+				if(err || stars==undefined){res.render("home", mergeUser(req.signedCookies.user, {nav:"Popular", games:[]})); return;};
 				var starsVal = 0;
 				for (var s = 0; s < stars.length; s++) {
 					console.log("i-sloop"+s+": "+i);
@@ -109,6 +110,7 @@ OBG.get('/', function (req, res){
 				}
 				ass_pks[i].stars = Math.floor(starsVal/stars.length);
 				db.all("SELECT user_id FROM subscriptions WHERE asset_pack_id='"+ass_pks[i].asset_pack_id+"';", function(err, subs){
+					if(err || subs==undefined){res.render("home", mergeUser(req.signedCookies.user, {nav:"Popular", games:[]})); return;};
 					var is_subbed = false;
 					if(req.signedCookies.user != undefined){
 						var user_id = JSON.parse(req.signedCookies.user).user_id;
@@ -125,16 +127,18 @@ OBG.get('/', function (req, res){
 			});
 		}
 	}); 
-});
+ });
 //--------------------------------------------------------------------/////-specific game page
 OBG.get('/game/:asset_pack_id', function (req, res){
 	db.get("SELECT * from asset_packs WHERE asset_pack_id='"+req.params.asset_pack_id+"';", function(err, ass_pk){
-		
 		db.all("SELECT * FROM stars WHERE asset_pack_id='"+req.params.asset_pack_id+"';",function(err, stars){
 			var starsVal = 0;
 			for (var s = 0; s < stars.length; s++)
 				starsVal += stars[s].rating;
-			ass_pk.stars = Math.floor(starsVal/stars.length);
+			if(stars.length == 0)
+				ass_pk.stars = 0;
+			else
+				ass_pk.stars = Math.floor(starsVal/stars.length);
 			db.all("SELECT user_id FROM subscriptions WHERE asset_pack_id='"+req.params.asset_pack_id+"';", function(err, subs){
 				var is_subbed = false;
 				var user_id = JSON.parse(req.signedCookies.user).user_id;
@@ -226,6 +230,7 @@ OBG.post('/signup', function(req, res){
 OBG.post('/signin', function(req, res){
 	var email = req.body.email.toLowerCase();
 	var password = req.body.password;
+	console.log("signing in with: " + email + password);
 	db.serialize(function(){
 		db.get("SELECT * FROM users WHERE user_email='"+email+"';", function(err, user){
 			if(err){ authError(err, res); return; }
@@ -239,7 +244,6 @@ OBG.post('/signin', function(req, res){
 					if(match==false){ authError("The password was not correct.", res); return; }
 					res.cookie('user', JSON.stringify(user), {signed: true });
 					res.redirect("/");
-
 				});
 			});
 		});
@@ -303,8 +307,31 @@ OBG.post('/asset', function(req, res){
 		});
 	});
  });
-
-
+//--------------------------------------------------------------------/////-set subscription
+OBG.post('/api/unsubscribe', function(req, res){
+	console.log("unsub");
+	var ass = req.body.ass_pk_id;
+	if(req.signedCookies.user==undefined){
+		res.send(403, {error:"user not signed in"});
+		return;
+	}
+	user = JSON.parse(req.signedCookies.user);
+	db.run("DELETE FROM subscriptions WHERE user_id='"+user.user_id+"' and asset_pack_id='"+ass+"';");
+});
+//--------------------------------------------------------------------/////-set subscription
+OBG.post('/api/subscribe', function(req, res){
+	console.log("sub");
+	var ass = req.body.ass_pk_id;
+	if(req.signedCookies.user==undefined){
+		res.send(403, {error:"user not signed in"});
+		return;
+	}
+	user = JSON.parse(req.signedCookies.user);
+	db.run("INSERT INTO subscriptions (user_id, asset_pack_id) VALUES('"+user.user_id+"', '"+ass+"');", function(err){
+		if(err) res.send(400, {err:err});
+		else res.send(200, {});
+	});
+});
 //404 Error start/////////////////////////////////////////////////////////////////////////
 OBG.get("*", function (req, res){
 	res.render('front_error', {
@@ -313,7 +340,7 @@ OBG.get("*", function (req, res){
 	});
 	console.log("requested path: "+req.path);
 	res.send(404, {});
-});
+ });
 //404 Error end/////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
 //Misc Start//////////////////////////////////////////////////////////////////////////////
