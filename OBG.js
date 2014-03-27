@@ -66,7 +66,7 @@ var mailer = nodemailer.createTransport("SMTP",{
    service: "Gmail",
    auth: {
 		user: "surfaceRealms.noreply@gmail.com",
-		pass: "obgobgobg"
+		pass: "boardsandgames1"
    }
 });
 //setup password encryption
@@ -90,7 +90,7 @@ var comparePassword = function (password, hash, callback) {
    });
 };
 //start server
-
+var serverlist = {};
 OBG.listen(9001);
 //Set Up End///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +108,10 @@ OBG.get('/', function (req, res){
 					console.log("i-sloop"+s+": "+i);
 					starsVal += stars[s].rating;
 				}
-				ass_pks[i].stars = Math.floor(starsVal/stars.length);
+				if(stars.length == 0)
+					ass_pks[i].stars = 0;
+				else
+					ass_pks[i].stars = Math.floor(starsVal/stars.length);
 				db.all("SELECT user_id FROM subscriptions WHERE asset_pack_id='"+ass_pks[i].asset_pack_id+"';", function(err, subs){
 					if(err || subs==undefined){res.render("home", mergeUser(req.signedCookies.user, {nav:"Popular", games:[]})); return;};
 					var is_subbed = false;
@@ -317,7 +320,7 @@ OBG.post('/api/unsubscribe', function(req, res){
 	}
 	user = JSON.parse(req.signedCookies.user);
 	db.run("DELETE FROM subscriptions WHERE user_id='"+user.user_id+"' and asset_pack_id='"+ass+"';");
-});
+ });
 //--------------------------------------------------------------------/////-set subscription
 OBG.post('/api/subscribe', function(req, res){
 	console.log("sub");
@@ -331,15 +334,110 @@ OBG.post('/api/subscribe', function(req, res){
 		if(err) res.send(400, {err:err});
 		else res.send(200, {});
 	});
+ });
+
+OBG.post('/api/login', function(req, res){
+	if(req.body.email==undefined || req.body.password==undefined){
+		res.send(200, {success:false, error:"insufficient data"}); return;
+	}
+	var email = req.body.email.toLowerCase();
+	var password = req.body.password;
+
+	db.serialize(function(){
+		db.get("SELECT * FROM users WHERE user_email='"+email+"';", function(err, user){
+			if(err){ res.send(200, {success:false, error:err}); return; }
+			if(user==undefined){ res.send(200, {success:false, error:"email doesn't exist"}); return; }
+			if(user.activated == false){ res.send(200, {success:false, error:"not activated"}); return; }
+			db.get("SELECT * FROM passwords WHERE user_id='"+user.user_id+"';", function(err, pass){
+				if(err){ res.send(200, {success:false, error:err}); return; }
+				if(pass==undefined){ res.send(200, {success:false, error:"no password"}); return; }
+				comparePassword(password, pass.hash, function(err, match){
+					if(err){ res.send(200, {success:false, error:err}); return; }
+					if(match!=true){ res.send(200, {success:false, error:"password incorrect"}); return; }
+					res.send(200, {success:true, "user":user});
+				});
+			});
+		});
+	});
+ });
+
+OBG.post('/api/server_start', function(req, res){
+	var data = {
+		server_name:req.body.server_name,
+		game_name:req.body.server_name,
+		max_num_players:req.body.max_num_players,
+		host_id:req.body.host_id,
+		server_passphrase:req.body.server_passphrase,
+		ip_address:req.connection.remoteAddress
+	}
+	var new_server = server(data);
+	console.log(new_server);
+	serverlist[new_server.hashCode] = new_server;
+	data.hash = new_server.hashCode;
+	res.send(200, data);
+ });
+
+OBG.post('/api/server_heartbeat', function(req, res){
+	for(var attrname in serverlist)
+		console.log(attrname);
+	// console.log(serverlist);
+	gip = req.body.gip;
+	num = req.body.num_players;
+	ip = req.connection.remoteAddress;
+	if(serverlist[gip]!=undefined){
+		serverlist[gip].ip_address=ip;
+		var hash = serverlist[gip].hash();
+		if(hash != gip){
+			serverlist[hash] = serverlist[gip];
+			delete serverlist[gip];
+		}
+		res.send(200, {success:true, gip:hash});
+		serverlist[hash].ping();
+		serverlist[hash].num_players = num_players;
+	}else{
+		res.send(200, {success:false, error:"not started, mush ping every 5000ms or less"});
+	}
+	for(var attrname in serverlist)
+		console.log("post: "+attrname);
+ });
+	
+OBG.get('/api/subs', function(req, res){
+	var user_id = req.query.user_id;
+	db.all("SELECT asset_pack_id, asset_version_id FROM subscriptions WHERE user_id='"+user_id+"';", function(err, subs){
+	if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
+	if(subs == undefined) subs = new Array();
+		for (var i = 0; i < subs.length; i++) {
+			if(subs[i].asset_version_id == null)
+				subs[i].download_url = "/api/asset/"+subs[i].asset_pack_id;
+			else
+				subs[i].download_url = "/api/asset/"+subs[i].asset_pack_id+"/"+subs[i].asset_version_id;
+		};
+		res.send(200, {success:true, subscriptions:subs})
+	});
 });
+OBG.get('/api/asset/:asset_pack_id/:asset_version_id', function(req, res){
+	db.get("SELECT asset_url FROM asset_Version WHERE asset_pack_id='"+req.params.asset_pack_id+"' AND asset_version_id='"+req.params.asset_version_id+"';", function(err, asset){
+		if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
+		if(asset==undefined){res.send(200, {success:false, error:"no such asset"});}
+		res.sendfile(__dirname+asset.asset_url); 
+	});
+});
+OBG.get('/api/asset/:asset_pack_id/', function(req, res){
+	db.get("SELECT asset_url FROM asset_Version WHERE asset_pack_id='"+req.params.asset_pack_id+"' ORDER BY version DESC LIMIT 1 ", function(err, asset){
+		if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
+		if(asset==undefined){res.send(200, {success:false, error:"no such asset"});}
+		res.sendfile(__dirname+asset.asset_url); 
+	});
+});
+
 //404 Error start/////////////////////////////////////////////////////////////////////////
 OBG.get("*", function (req, res){
-	res.render('front_error', {
+	res.render('error', {
 		"errorNumber":404,
-		"comment":"Sorry, you seem to have gone to page that does not exist."
+		"comment":"Sorry, you seem to have gone to page that does not exist.",
+		"nav":"Error"
 	});
 	console.log("requested path: "+req.path);
-	res.send(404, {});
  });
 //404 Error end/////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -381,3 +479,30 @@ var authError = function(e, res){
  }
 //Misc End//////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
+//consructors/////////////////////////////////////////////////////////////////////////////
+// server_name, game_name, max_num_players, host_id, ip_address, password
+var server = function(options){
+	var new_server = {};
+	for (var attrname in options)
+		new_server[attrname] = options[attrname];
+	if(options.server_passphrase==undefined)
+		delete new_server.server_passphrase;
+	new_server.hash = function(){
+		new_server.hashCode = new_server.ip_address.replace(/[.]/g, "_");
+		return new_server.hashCode;
+	}
+	new_server.hash();
+	new_server.timeout = undefined;
+	new_server.ping = function(options){
+		clearTimeout(new_server.timeout);
+		for (var attrname in options)
+			new_server[attrname] = options[attrname];
+		new_server.timeout = setTimeout(function(){
+			new_server.remove();
+		}, 5000);
+	}
+	new_server.remove = function(){
+		delete serverlist[new_server.hashCode];
+	}
+	return new_server;
+ }

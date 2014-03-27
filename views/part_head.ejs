@@ -49,6 +49,9 @@
 					<% if (typeof search == 'string' && search) { %>
 						<li><a href="#" class="active"><%= search %></a></li>
 					<% } %>
+					<% if (nav == 'Error') { %>
+						<li><a href="#" class="active"><%= errorNumber %></a></li>
+					<% } %>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 						<% if (typeof user == 'object' && user) { %>
@@ -85,7 +88,7 @@
 						<div class="input-group">
 						    <input type="text" class="form-control" placeholder="Search..." id="query" name="query" value="" style="margin-top:0px;">
 							<div class="input-group-btn">
-								<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+								<button type="submit" class="btn btn-default" style="color:#333;"><span class="glyphicon glyphicon-search" style="color:#333;"></span></button>
 							</div>
 						</div>
 					</form>

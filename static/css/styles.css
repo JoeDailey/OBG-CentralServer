@@ -2,7 +2,7 @@
 	box-sizing:border-box;
 }
 body{
-	background: url(/static/img/black_pattern01.jpg);
+	background: url(/static/img/black_pattern04.jpg);
 }
 @media (min-width: 768px) {
 	.right-bottom-edge{
@@ -27,6 +27,9 @@ body{
 		padding: 3px;
 		background: #3b9bef;
 		width: 100%;
+	}
+	.is-subscribed-image{
+		background: #0cd63b!important;
 	}
 	.asset-trap-title{
 		border-bottom: 7px solid #3b9bef;
@@ -72,7 +75,9 @@ body{
 		background: linear-gradient(to right, #0cd63b 0%,#4ee56c 50%,#0cd63b 100%);
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0cd63b', endColorstr='#0cd63b',GradientType=1 );
 	}
-
+	.asset-star{
+		color: white;
+	}
 	.asset-quick{
 		margin-left: 5px;
 		margin-right: 5px;
