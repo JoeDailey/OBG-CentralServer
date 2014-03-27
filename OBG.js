@@ -364,7 +364,7 @@ OBG.post('/api/login', function(req, res){
 OBG.post('/api/server_start', function(req, res){
 	var data = {
 		server_name:req.body.server_name,
-		game_name:req.body.server_name,
+		game_name:req.body.game_name,
 		max_num_players:req.body.max_num_players,
 		host_id:req.body.host_id,
 		server_passphrase:req.body.server_passphrase,
@@ -374,13 +374,11 @@ OBG.post('/api/server_start', function(req, res){
 	console.log(new_server);
 	serverlist[new_server.hashCode] = new_server;
 	data.hash = new_server.hashCode;
-	res.send(200, data);
+	res.send(200, {success:true, gid:new_server.hashCode});
  });
 
 OBG.post('/api/server_heartbeat', function(req, res){
 	for(var attrname in serverlist)
-		console.log(attrname);
-	// console.log(serverlist);
 	gip = req.body.gip;
 	num = req.body.num_players;
 	ip = req.connection.remoteAddress;
@@ -397,8 +395,6 @@ OBG.post('/api/server_heartbeat', function(req, res){
 	}else{
 		res.send(200, {success:false, error:"not started, mush ping every 5000ms or less"});
 	}
-	for(var attrname in serverlist)
-		console.log("post: "+attrname);
  });
 	
 OBG.get('/api/subs', function(req, res){
