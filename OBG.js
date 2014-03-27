@@ -132,17 +132,10 @@ OBG.get('/', function (req, res){
 	}); 
  });
 OBG.get('/matchmaking', function(req, res){
-	console.log(serverMap);
-	res.render('servers', mergeUser(req.signedCookies.user, {nav:"Servers", servers:{asdf:server({ 
-		server_name: 'Game PLace',
-		game_name: 'Life',
-		max_num_players: '6',
-		host_id: '1',
-		server_passphrase: 'asdf',
-		ip_address: '127.0.0.1',
-		hashCode: '127_0_0_1',
-		passHash: 'asdfasdfa'
-	})}}));
+	res.render('servers', mergeUser(req.signedCookies.user, {nav:"Servers", servers:serverMap}));
+ });
+OBG.get('/download', function(req, res){
+	res.render('download', mergeUser(req.signedCookies.user, {nav:"Download"}));
  });
 //--------------------------------------------------------------------/////-specific game page
 OBG.get('/game/:asset_pack_id', function (req, res){
@@ -391,12 +384,10 @@ OBG.post('/api/server_start', function(req, res){
  });
 
 OBG.post('/api/server_heartbeat', function(req, res){
+	var pingtime = new Date().getTime() - req.connection._idleStart;
 	var gip = req.body.gip;
 	var num_players = req.body.num_players;
 	var ip = req.connection.remoteAddress;
-	var pingtime = req.connection._idlestart - new Date().getTime();
-	console.log(req.connection._idlestart);
-	console.log(pingtime);
 	if(gip==undefined || num_players==undefined) {res.send(200, {success:false, error:"insufficient data"}); return}
 	if(serverMap[gip]!=undefined){
 		serverMap[gip].ip_address=ip;
@@ -409,6 +400,7 @@ OBG.post('/api/server_heartbeat', function(req, res){
 		}
 		serverMap[hash].ping();
 		serverMap[hash].num_players = num_players;
+		serverMap[hash].pingtime = pingtime;
 		res.send(200, {success:true, gip:hash});
 	}else{
 		res.send(200, {success:false, error:"not started, must ping every 5000ms or less"});

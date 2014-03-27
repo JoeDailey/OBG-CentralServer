@@ -12,7 +12,7 @@
 	.edge{
 		background-color: white;
 		width: 1%;
-		height: 50px;
+		height: 100%;
 		float: left;
 		margin-right:10px; 
 	}
@@ -27,11 +27,20 @@
 		font-size: 20px;
 		line-height: 30px;
 	}
+	.info-text{
+		float:right;
+	}
+	.join{
+		float:right;
+	}
 </style>
 <div class="server">
-	<div class="edge">&nbsp</div>
+	<div class="edge" style="background-color:rgb(<%= servers[hash].pingtime %>,<%= 255 - servers[hash].pingtime %>,0);">&nbsp</div>
 	<div class="server-info">
-		<span class="title-text"><%= servers[hash].server_name %><span class="between-text">Playing</span><%= servers[hash].game_name %></h1>
+		<span class="title-text"><%= servers[hash].server_name %>&nbsp<span class="between-text">Playing</span>&nbsp<%= servers[hash].game_name %></h1>
+		<button class="btn btn-default join"><i class="<%= (servers[hash].server_passphrase!=undefined)? 'glyphicon glyphicon-lock':'' %>"> </i>&nbspJoin</button>
+		<span class="info-text">Players: <%= servers[hash].num_players %> / <%= servers[hash].max_num_players %>&nbsp</h1>
+		<div class="clearfix"></div>
 	</div>
 	<div class="clearfix"></div>
 </div>
