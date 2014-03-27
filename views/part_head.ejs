@@ -43,14 +43,16 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li class="<%= (nav=='Popular')? 'active':'' %>" ><a href="/">Popular</a></li>
+					<li class="<%= (nav=='Servers')? 'active':'' %>" ><a href="/matchmaking">Find Match</a></li>
+					<li class="<%= (nav=='Download')? 'active':'' %>" ><a href="/download">Download</a></li>
 					<% if (typeof asset == 'object' && asset) { %>
-						<li><a href="#" class="active"><%= asset.asset_pack_name %></a></li>
+						<li class="active"><a href="#" ><%= asset.asset_pack_name %></a></li>
 					<% } %>
 					<% if (typeof search == 'string' && search) { %>
-						<li><a href="#" class="active"><%= search %></a></li>
+						<li class="active"><a href="#"><%= search %></a></li>
 					<% } %>
 					<% if (nav == 'Error') { %>
-						<li><a href="#" class="active"><%= errorNumber %></a></li>
+						<li class="active"><a href="#" ><%= errorNumber %></a></li>
 					<% } %>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
@@ -83,7 +85,7 @@
 							</li>
 						<% } %>
 				</ul>
-				<div class="col-sm-6 col-md-6">
+				<!-- <div class="col-sm-6 col-md-6">
 					<form class="navbar-form" role="search" method="get" id="search-form" name="search-form">
 						<div class="input-group">
 						    <input type="text" class="form-control" placeholder="Search..." id="query" name="query" value="" style="margin-top:0px;">
@@ -92,7 +94,7 @@
 							</div>
 						</div>
 					</form>
-				</div>
+				</div> -->
 				
 			</div><!-- /.navbar-collapse -->
 		</div><!-- /.container-fluid -->

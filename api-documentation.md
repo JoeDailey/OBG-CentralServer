@@ -37,7 +37,8 @@ body:
 	num_players
 result:
 	{success:true, gip:hash}
-	{success:false, error:"not started, mush ping every 5000ms or less"}
+	{success:false, error:"insufficient data"}
+	{success:false, error:"not started, must ping every 5000ms or less"}
 ```
 
 GETs
@@ -50,6 +51,21 @@ query params:
 result:
 	{success:true, subscriptions:subs}
 	{success:false, error:err}
+```
+
+/api/server/:hash_id
+--------------
+```
+result:
+	{success:true, server:serverinfo}
+	{success:false, error:"server does not exist"}
+```
+
+/api/servers
+--------------
+```
+result:
+	{success:true, servers:ArrayOfServers}
 ```
 
 /api/asset/:asset_pack_id/

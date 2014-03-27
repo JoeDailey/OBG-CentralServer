@@ -90,7 +90,7 @@ var comparePassword = function (password, hash, callback) {
    });
 };
 //start server
-var serverlist = {};
+var serverMap = {};
 OBG.listen(9001);
 //Set Up End///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -130,6 +130,19 @@ OBG.get('/', function (req, res){
 			});
 		}
 	}); 
+ });
+OBG.get('/matchmaking', function(req, res){
+	console.log(serverMap);
+	res.render('servers', mergeUser(req.signedCookies.user, {nav:"Servers", servers:{asdf:server({ 
+		server_name: 'Game PLace',
+		game_name: 'Life',
+		max_num_players: '6',
+		host_id: '1',
+		server_passphrase: 'asdf',
+		ip_address: '127.0.0.1',
+		hashCode: '127_0_0_1',
+		passHash: 'asdfasdfa'
+	})}}));
  });
 //--------------------------------------------------------------------/////-specific game page
 OBG.get('/game/:asset_pack_id', function (req, res){
@@ -371,37 +384,60 @@ OBG.post('/api/server_start', function(req, res){
 		ip_address:req.connection.remoteAddress
 	}
 	var new_server = server(data);
-	console.log(new_server);
-	serverlist[new_server.hashCode] = new_server;
-	data.hash = new_server.hashCode;
+	serverMap[new_server.hashCode] = new_server;
 	res.send(200, {success:true, gid:new_server.hashCode});
+	cacheArrayValid = false;
+	updateCache();
  });
 
 OBG.post('/api/server_heartbeat', function(req, res){
-	for(var attrname in serverlist)
-	gip = req.body.gip;
-	num = req.body.num_players;
-	ip = req.connection.remoteAddress;
-	if(serverlist[gip]!=undefined){
-		serverlist[gip].ip_address=ip;
-		var hash = serverlist[gip].hash();
+	var gip = req.body.gip;
+	var num_players = req.body.num_players;
+	var ip = req.connection.remoteAddress;
+	var pingtime = req.connection._idlestart - new Date().getTime();
+	console.log(req.connection._idlestart);
+	console.log(pingtime);
+	if(gip==undefined || num_players==undefined) {res.send(200, {success:false, error:"insufficient data"}); return}
+	if(serverMap[gip]!=undefined){
+		serverMap[gip].ip_address=ip;
+		var hash = serverMap[gip].hash();
 		if(hash != gip){
-			serverlist[hash] = serverlist[gip];
-			delete serverlist[gip];
+			serverMap[hash] = serverMap[gip];
+			delete serverMap[gip];
+			cacheArrayValid = false;
+			updateCache();
 		}
+		serverMap[hash].ping();
+		serverMap[hash].num_players = num_players;
 		res.send(200, {success:true, gip:hash});
-		serverlist[hash].ping();
-		serverlist[hash].num_players = num_players;
 	}else{
-		res.send(200, {success:false, error:"not started, mush ping every 5000ms or less"});
+		res.send(200, {success:false, error:"not started, must ping every 5000ms or less"});
 	}
  });
-	
+OBG.get('/api/server/:serverhash', function(req, res){
+	if(serverMap[req.params.serverhash]==undefined){
+		res.send(200, {success:false, error:"server does not exist"});
+		return;
+	}
+	res.send(200, {success:true, server:serverMap[serverhash]});
+ });
+
+OBG.get('/api/servers', function(req, res){
+	if(cacheArrayValid)
+		res.send(200, {success:true, servers:cacheArray});
+	else{
+		updateCache(function(){
+			res.send(200, {success:true, servers:cacheArray})	
+		})
+	}
+ });
+
+
 OBG.get('/api/subs', function(req, res){
 	var user_id = req.query.user_id;
 	db.all("SELECT asset_pack_id, asset_version_id FROM subscriptions WHERE user_id='"+user_id+"';", function(err, subs){
-	if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
-	if(subs == undefined) subs = new Array();
+		if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
+		if(subs == undefined) subs = new Array();
 		for (var i = 0; i < subs.length; i++) {
 			if(subs[i].asset_version_id == null)
 				subs[i].download_url = "/api/asset/"+subs[i].asset_pack_id;
@@ -498,7 +534,19 @@ var server = function(options){
 		}, 5000);
 	}
 	new_server.remove = function(){
-		delete serverlist[new_server.hashCode];
+		delete serverMap[new_server.hashCode];
+		cacheArrayValid = false;
+		updateCache();
 	}
 	return new_server;
  }
+var cacheArray = new Array();
+var cacheArrayValid = true;
+var updateCache = function(callback){
+	cacheArray = new Array();
+	for(var hash in serverMap)
+		cacheArray.push(serverMap[hash]);
+	cacheArrayValid = true;
+	if(callback!=undefined)
+		callback();
+}
