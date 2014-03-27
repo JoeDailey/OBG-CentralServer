@@ -97,23 +97,27 @@ OBG.listen(9001);
 //RoutingStart///////////////////////////////////////////////////////////////////////////
 //--------------------------------------------------------------------/////-landing page
 OBG.get('/', function (req, res){
-	db.all("SELECT asset_packs.*, img.image_url FROM asset_packs LEFT JOIN (SELECT * FROM images LIMIT 1) AS img ON asset_packs.asset_pack_id=img.asset_pack_id", function(err, ass_pks){	
-		if(err || ass_pks==undefined || ass_pks.length==0){res.render("home", mergeUser(req.signedCookies.user, {nav:"Popular", games:[]})); return;};
-		for (var a = 0; a < ass_pks.length; a++) {
-			var i = a;
-			db.all("SELECT * FROM stars WHERE asset_pack_id='"+ass_pks[i].asset_pack_id+"';",function(err, stars){
-				if(err || stars==undefined){res.render("home", mergeUser(req.signedCookies.user, {nav:"Popular", games:[]})); return;};
+	db.all("SELECT asset_packs.*, img.image_url FROM asset_packs INNER JOIN images AS img ON asset_packs.asset_pack_id=img.asset_pack_id GROUP BY asset_packs.asset_pack_id;", function(err, ass_pks){	
+		if(err) console.log(err);
+		if(ass_pks==undefined || ass_pks.length==0){console.log("wat?"); res.render("home", mergeUser(req.signedCookies.user, {nav:"Popular", games:[]})); return;};
+		var count = -1*ass_pks.length;
+		ass_pks.forEach(function(ass_pk, i) {
+			db.all("SELECT * FROM stars WHERE asset_pack_id='"+ass_pk.asset_pack_id+"';",function(err, stars, i){
+				if(err) console.log(err);
+				if(err || stars==undefined) stars=new Array();
 				var starsVal = 0;
 				for (var s = 0; s < stars.length; s++) {
 					console.log("i-sloop"+s+": "+i);
 					starsVal += stars[s].rating;
 				}
 				if(stars.length == 0)
-					ass_pks[i].stars = 0;
+					ass_pk.stars = 0;
 				else
-					ass_pks[i].stars = Math.floor(starsVal/stars.length);
-				db.all("SELECT user_id FROM subscriptions WHERE asset_pack_id='"+ass_pks[i].asset_pack_id+"';", function(err, subs){
-					if(err || subs==undefined){res.render("home", mergeUser(req.signedCookies.user, {nav:"Popular", games:[]})); return;};
+					ass_pks.stars = Math.floor(starsVal/stars.length);
+				db.all("SELECT user_id FROM subscriptions WHERE asset_pack_id='"+ass_pk.asset_pack_id+"';", function(err, subs, i){
+					console.log(subs);
+					if(err){ console.log(err); subs = new Array() };
+					if(subs==undefined) subs = new Array();
 					var is_subbed = false;
 					if(req.signedCookies.user != undefined){
 						var user_id = JSON.parse(req.signedCookies.user).user_id;
@@ -121,14 +125,17 @@ OBG.get('/', function (req, res){
 							if(subs[sub].user_id == user_id)
 								is_subbed = true;
 					}
-					ass_pks[i].is_subbed = is_subbed;
-					ass_pks[i].count = subs.length;
+					ass_pk.is_subbed = is_subbed;
+					ass_pk.count = subs.length;
 					
-					if(i === ass_pks.length-1)
+					count++;
+					if(count === 0){
+						console.log(ass_pks);
 						res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks}));
+					}
 				});
 			});
-		}
+		});
 	}); 
  });
 OBG.get('/matchmaking', function(req, res){
@@ -149,11 +156,14 @@ OBG.get('/game/:asset_pack_id', function (req, res){
 			else
 				ass_pk.stars = Math.floor(starsVal/stars.length);
 			db.all("SELECT user_id FROM subscriptions WHERE asset_pack_id='"+req.params.asset_pack_id+"';", function(err, subs){
+				
 				var is_subbed = false;
-				var user_id = JSON.parse(req.signedCookies.user).user_id;
-				for (var sub = 0; sub < subs.length; sub++)
-					if(subs[sub].user_id == user_id)
-						is_subbed = true;
+				if(req.signedCookies.user){	
+					var user_id = JSON.parse(req.signedCookies.user).user_id;
+					for (var sub = 0; sub < subs.length; sub++)
+						if(subs[sub].user_id == user_id)
+							is_subbed = true;
+				}
 				ass_pk.is_subbed = is_subbed;
 				ass_pk.count = subs.length;
 				db.all("SELECT image_url FROM images WHERE asset_pack_id='"+req.params.asset_pack_id+"';", function(err, imgs){
@@ -220,7 +230,7 @@ OBG.post('/signup', function(req, res){
 											db.get("DELETE FROM users WHERE user_email='"+email+"' AND user_name='"+username+"';");
 											db.get("DELETE FROM passwords WHERE user_id='"+user.user_id+"';");
 											console.log(mail_error);
-											authError("There was an error. PLease try again.", res);
+											authError("There was an error. Please try again.", res);
 											return;
 										}
 										console.log("sent mail");
@@ -300,13 +310,13 @@ OBG.post('/asset', function(req, res){
 	var imgs = req.body.ass_imgs;
 	var ass = uuid.v4().split('-')[0];
 	var ass_pk = '/static/ass_pks/'+ass+"_0.asspk";
-	console.log(req);
+	
 	fs.rename(req.files.ass_pk.path, __dirname + ass_pk, function(err){console.log(err);});
 	db.serialize(function(){
 		db.run("INSERT INTO asset_packs (asset_pack_id, asset_pack_name, user_id, description) VALUES ('"+ass+"', '"+name+"', '"+user.user_id+"', '"+desc+"');", function(err){
-			if(err){console.log(err); return;}
+			if(err){console.log(err); res.send(404, {}); return;}
 			db.run("INSERT INTO asset_version (asset_pack_id, asset_url, change_log, version) VALUES ('"+ass+"', '"+ass_pk+"', 'Initial Submission', 0);", function(err){
-				if(err){console.log(err); return;}
+				if(err){console.log(err); res.send(404, {}); return;}
 				imgs = imgs.split("!");
 				for (var i = imgs.length - 1; i >= 0; i--) {
 					db.run("UPDATE images SET asset_pack_id='"+ass+"' WHERE image_url='"+imgs[i]+"';");
@@ -321,7 +331,7 @@ OBG.post('/api/unsubscribe', function(req, res){
 	console.log("unsub");
 	var ass = req.body.ass_pk_id;
 	if(req.signedCookies.user==undefined){
-		res.send(403, {error:"user not signed in"});
+		res.send(403, {error:"user not signed in", url:"/auth?m=Sign in to subscribe to content!"});
 		return;
 	}
 	user = JSON.parse(req.signedCookies.user);
@@ -332,7 +342,7 @@ OBG.post('/api/subscribe', function(req, res){
 	console.log("sub");
 	var ass = req.body.ass_pk_id;
 	if(req.signedCookies.user==undefined){
-		res.send(403, {error:"user not signed in"});
+		res.send(403, {error:"user not signed in", url:"/auth?m=Sign in to subscribe to content!"});
 		return;
 	}
 	user = JSON.parse(req.signedCookies.user);

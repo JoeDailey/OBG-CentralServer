@@ -60,6 +60,7 @@
 		padding: 20px;
 		color: white;
 		margin-top: 10px;
+		margin-bottom:20px;
 		background-color: rgba(0,0,0,0.7);	
 	}
 	#attr-info{
@@ -143,11 +144,14 @@
 					data:{
 						ass_pk_id:"<%= game.asset_pack_id %>"
 					},
-					error:function(err, status){t
+					error:function(err, status, stuff){
 						// is_subbed = !is_subbed;
 						// $(".sub_switch").click();
 						clearTimeout(timeout);
 						clickable = 0;
+						console.log(err, status, stuff);
+						if(err.responseJSON.url != undefined)
+							document.location.href = err.responseJSON.url;
 					}
 				});
 			}
