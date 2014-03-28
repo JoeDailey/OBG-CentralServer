@@ -4,6 +4,9 @@ OBG-CentralServer
 Central server for the Online Board Game project
 =================
 
+Running at http://surfacerealms.com
+
+
 Instructions:
 
 	Install Node:
