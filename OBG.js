@@ -38,6 +38,7 @@ var dberror = function(table, err){
 //Set Up Start///////////////////////////////////////////////////////////////////////////
 //rendering///////////////////////////////////////////////////////////////////////////// 
 var express = require('express');
+var expressValidator = require('express-validator');
 var OBG = express();
 OBG.set('view engine', 'ejs');
 //uuid/////////////////////////////////////////////////////////////////////////////////////
@@ -55,6 +56,7 @@ OBG.use(express.cookieParser('gamesandboardsandgames'));
 OBG.use(express.session({secret: 'boardsandgamesandboards'}));
 //body parsing/////////////////////////////////////////////////////////////////////////////
 OBG.use(express.bodyParser({uploadDir:__dirname + '/static/tmp/'}));
+OBG.use(expressValidator({}));
 OBG.set('view options', {
 	layout: false
  });
@@ -148,6 +150,7 @@ OBG.get('/download', function(req, res){
  });
 //--------------------------------------------------------------------/////-specific game page
 OBG.get('/game/:asset_pack_id', function (req, res){
+	req.sanitize('asset_pack_id').toString();
 	db.get("SELECT * from asset_packs WHERE asset_pack_id='"+req.params.asset_pack_id+"';", function(err, ass_pk){
 		db.all("SELECT * FROM stars WHERE asset_pack_id='"+req.params.asset_pack_id+"';",function(err, stars){
 			var starsVal = 0;
@@ -197,6 +200,10 @@ OBG.get('/auth', function(req, res){
  });
 //--------------------------------------------------------------------/////-request to sign up
 OBG.post('/signup', function(req, res){
+	req.sanitize('email').toString();
+	req.sanitize('username').toString();
+	req.sanitize('password').toString();
+	req.sanitize('confirm').toString();
 	var email = req.body.email.toLowerCase();
 	var username = req.body.username;
 	var password = req.body.password;
@@ -249,6 +256,8 @@ OBG.post('/signup', function(req, res){
  });
 //--------------------------------------------------------------------/////-request to sign in
 OBG.post('/signin', function(req, res){
+	req.sanitize('email').toString();
+	req.sanitize('password').toString();
 	var email = req.body.email.toLowerCase();
 	var password = req.body.password;
 	console.log("signing in with: " + email + password);
@@ -279,6 +288,7 @@ OBG.get('/logout', function(req, res){
 OBG.get('/activate', function(req, res){ res.render("activate", {nav:""}); });
 //--------------------------------------------------------------------/////-thanks for activating
 OBG.get('/activate/:user_id', function(req, res){ 
+	req.sanitize('user_id').toString();
 	db.serialize(function(){
 		db.run("UPDATE users SET activated='true' WHERE user_id='"+req.params.user_id+"';", function(err){
 			res.render("activated", {nav:""});
@@ -307,6 +317,10 @@ OBG.post('/delimage', function(req, res){
 OBG.post('/asset', function(req, res){
 	var user = JSON.parse(req.signedCookies.user);
 	if(user==undefined){res.redirect("/auth?m=You need to log in to upload games."); return}
+	
+	req.sanitize('ass_name').toString();
+	req.sanitize('add_desc').toString();
+	req.sanitize('ass_imgs').toString();
 	var name = req.body.ass_name;
 	var desc = req.body.ass_desc;
 	var imgs = req.body.ass_imgs;
@@ -331,6 +345,7 @@ OBG.post('/asset', function(req, res){
 //--------------------------------------------------------------------/////-set subscription
 OBG.post('/api/unsubscribe', function(req, res){
 	console.log("unsub");
+	req.sanitize('asset_pk_id').toString();
 	var ass = req.body.ass_pk_id;
 	if(req.signedCookies.user==undefined){
 		res.send(403, {error:"user not signed in", url:"/auth?m=Sign in to subscribe to content!"});
@@ -342,6 +357,7 @@ OBG.post('/api/unsubscribe', function(req, res){
 //--------------------------------------------------------------------/////-set unsubscription
 OBG.post('/api/subscribe', function(req, res){
 	console.log("sub");
+	req.sanitize('asset_pk_id').toString();
 	var ass = req.body.ass_pk_id;
 	if(req.signedCookies.user==undefined){
 		res.send(403, {error:"user not signed in", url:"/auth?m=Sign in to subscribe to content!"});
@@ -358,6 +374,9 @@ OBG.post('/api/login', function(req, res){
 	if(req.body.email==undefined || req.body.password==undefined){
 		res.send(200, {success:false, error:"insufficient data"}); return;
 	}
+
+	req.sanitize('email').toString();
+	req.sanitize('password').toString();
 	var email = req.body.email.toLowerCase();
 	var password = req.body.password;
 
