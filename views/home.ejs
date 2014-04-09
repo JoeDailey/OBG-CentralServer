@@ -3,4 +3,11 @@
 <% games.forEach(function(game) { %>
 	<%include part_asset_post %>
 <% }); %>
+<script>
+	$(document).ready(function(){
+		setTimeout(function(){
+			(".asset-star").css("color","white");
+		},200);
+	});
+</script>
 <%include part_foot %>
