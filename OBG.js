@@ -397,7 +397,7 @@ OBG.post('/api/server_start', function(req, res){
 //--------------------------------------------------------------------/////-keep a server alive
 OBG.post('/api/server_heartbeat', function(req, res){
 	var pingtime = new Date().getTime() - req.connection._idleStart;
-	var gip = req.body.gip;
+	var gip = req.body.gid;
 	var num_players = req.body.num_players;
 	var ip = req.connection.remoteAddress;
 	if(gip==undefined || num_players==undefined) {res.send(200, {success:false, error:"insufficient data"}); return}
@@ -458,7 +458,7 @@ OBG.get('/api/subs/:user_id', function(req, res){
 OBG.get('/api/asset/:asset_pack_id/:asset_version_id', function(req, res){
 	db.get("SELECT asset_url FROM asset_Version WHERE asset_pack_id='"+req.params.asset_pack_id+"' AND asset_version_id='"+req.params.asset_version_id+"';", function(err, asset){
 		if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
-		if(asset==undefined){res.send(200, {success:false, error:"no such asset"});}
+		if(asset==undefined){res.send(200, {success:false, error:"no such asset"}); return;}
 		res.sendfile(__dirname+asset.asset_url); 
 	});
  });
