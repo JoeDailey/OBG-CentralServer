@@ -1,6 +1,15 @@
 <%include part_head %>
+<div style="margin:30px;">
 
-<% games.forEach(function(game) { %>
-	<%include part_asset_post %>
-<% }); %>
+	<div class="col-sm-9 col-xs-12">
+		<% games.forEach(function(game) { %>
+			<%include part_asset_post %>
+		<% }); %>
+	</div>
+	<div class="col-sm-3 col-xs-12" style="background:black;">
+		<% updates.forEach(function(update) { %>
+			<%include part_git_update %>
+		<% }); %>
+	</div>
+</div>
 <%include part_foot %>

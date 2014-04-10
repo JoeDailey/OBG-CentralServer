@@ -58,6 +58,8 @@ OBG.use(express.bodyParser({uploadDir:__dirname + '/static/tmp/'}));
 OBG.set('view options', {
 	layout: false
 });
+//
+var https = require('https');
 //email////////////////////////////////////////////////////////////////////////////////////
 var emailTemplates = require('email-templates');
 var templatesDir = path.join(__dirname, 'templates');
@@ -97,9 +99,56 @@ OBG.listen(9001);
 //RoutingStart///////////////////////////////////////////////////////////////////////////
 //--------------------------------------------------------------------/////-landing page
 OBG.get('/', function (req, res){
+	var gitevents;
+	var lock = 0;
+	var options = {
+		host:"api.github.com",
+		path:"/repos/phonyphonecall/AssetGenerator/events",
+		headers:{
+			"User-Agent":"SurfaceRealms-JoeDailey"
+		},
+		method: 'GET'
+	}
+	https.request(options , function(response){
+		var data = "";
+		response.on('data', function(chunk) {
+			data += chunk;
+		});
+		response.on('end', function() {
+			data = JSON.parse(data);
+			data.forEach(function (update) {
+				gitevents.push(update);
+			});
+			lock++;
+		});
+	}).end();
+	var options = {
+		host:"api.github.com",
+		path:"/repos/SpexGuy/OnlineBoardGame/events",
+		headers:{
+			"User-Agent":"SurfaceRealms-JoeDailey"
+		},
+		method: 'GET'
+	}
+	https.request(options , function(response){
+		var data = "";
+		response.on('data', function(chunk) {
+			data += chunk;
+		});
+		response.on('end', function() {
+			data = JSON.parse(data);
+			data.forEach(function (update) {
+				gitevents.push(update);
+			});
+			lock++;
+			if(lock>=3){
+
+			}
+		});
+	}).end();
 	db.all("SELECT asset_packs.*, img.image_url FROM asset_packs INNER JOIN images AS img ON asset_packs.asset_pack_id=img.asset_pack_id GROUP BY asset_packs.asset_pack_id;", function(err, ass_pks){	
 		if(err) console.log(err);
-		if(ass_pks==undefined || ass_pks.length==0){console.log("wat?"); res.render("home", mergeUser(req.signedCookies.user, {nav:"Popular", games:[]})); return;};
+		if(ass_pks==undefined || ass_pks.length==0){console.log("wat?"); res.render("home", mergeUser(req.signedCookies.user, {nav:"Popular", games:[], updates:["a","a","a"]})); return;};
 		var count = -1*ass_pks.length;
 		ass_pks.forEach(function(ass_pk, i) {
 			db.all("SELECT * FROM stars WHERE asset_pack_id='"+ass_pk.asset_pack_id+"';",function(err, stars, i){
@@ -131,7 +180,7 @@ OBG.get('/', function (req, res){
 					count++;
 					if(count === 0){
 						console.log(ass_pks);
-						res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks}));
+						res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:["a","a","a"]}));
 					}
 				});
 			});
@@ -476,23 +525,7 @@ OBG.get("*", function (req, res){
 //404 Error end/////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
 //Misc Start//////////////////////////////////////////////////////////////////////////////
-//base cookie check and navigation building
-var getUser = function (){
-	if (req.signedCookies.user == undefined) {   
-		return {
-			name:'Sign In',
-			link:'/signup',
-			options:[
-				{
-					name:'Sign Up',
-					link:'/signup'
-				}
-			]
-		}
-	} else {
-		return JSON.parse(req.signedCookies.user);
-	}
- }
+
 // merge two objects
 function merge(obj1, obj2){
 	for (var attrname in obj2) { obj1[attrname] = obj2[attrname]; }
@@ -510,6 +543,13 @@ function mergeUser(user, obj2){
 var authError = function(e, res){
 	console.log(e);
 	res.redirect("/auth?m="+e);
+ }
+var compare = function(a,b) {
+  // if (a.last_nom < b.last_nom)
+  //    return -1;
+  // if (a.last_nom > b.last_nom)
+  //   return 1;
+  return 0;
  }
 //Misc End//////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
