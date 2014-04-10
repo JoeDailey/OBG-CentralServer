@@ -384,8 +384,10 @@ OBG.post('/api/server_start', function(req, res){
 		max_num_players:req.body.max_num_players,
 		host_id:req.body.host_id,
 		server_passphrase:req.body.server_passphrase,
-		ip_address:req.connection.remoteAddress
+		ip_address:req.headers['X-Real-IP'] || req.connection.remoteAddress
 	}
+
+console.log(req.headers);
 	var new_server = server(data);
 	serverMap[new_server.hashCode] = new_server;
 	res.send(200, {success:true, gid:new_server.hashCode});
@@ -522,6 +524,7 @@ var server = function(options){
 	if(options.server_passphrase==undefined)
 		delete new_server.server_passphrase;
 	new_server.hash = function(){
+		
 		new_server.hashCode = new_server.ip_address.replace(/[.]/g, "_");
 		return new_server.hashCode;
 	}
