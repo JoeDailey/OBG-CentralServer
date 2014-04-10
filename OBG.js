@@ -12,7 +12,7 @@ var exists = fs.existsSync(file);
 if (!exists) {
 	console.log("Creating DB file.");
 	fs.openSync(file, "w");
-}
+ }
 var sqlite3 = require("sqlite3").verbose();
 var db = new sqlite3.Database(file);
 if (!exists) {
@@ -25,19 +25,20 @@ if (!exists) {
 		db.run('CREATE TABLE "stars" ("user_id" Integer NOT NULL, "asset_pack_id" blob NOT NULL, "rating" integer NOT NULL);', function(err){ if(err) dberror("stars", err); });
 		db.run('CREATE TABLE "images" ("user_id" Integer NOT NULL, "asset_pack_id" blob NOT NULL, "image_url" blob NOT NULL);', function(err){ if(err) dberror("images", err); });
 	});
-}
+ }
 var dberror = function(table, err){
 	console.log(table, err);
 	console.log("deleting " + file);
 	if(fs.existsSync(file))
 		fs.unlink(file);
-}
+ }
 /////////END CREATE DATABASE
 //Database End/////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 //Set Up Start///////////////////////////////////////////////////////////////////////////
 //rendering///////////////////////////////////////////////////////////////////////////// 
 var express = require('express');
+var expressValidator = require('express-validator');
 var OBG = express();
 OBG.set('view engine', 'ejs');
 //uuid/////////////////////////////////////////////////////////////////////////////////////
@@ -55,11 +56,16 @@ OBG.use(express.cookieParser('gamesandboardsandgames'));
 OBG.use(express.session({secret: 'boardsandgamesandboards'}));
 //body parsing/////////////////////////////////////////////////////////////////////////////
 OBG.use(express.bodyParser({uploadDir:__dirname + '/static/tmp/'}));
+OBG.use(expressValidator({}));
 OBG.set('view options', {
 	layout: false
+<<<<<<< HEAD
 });
 //
 var https = require('https');
+=======
+ });
+>>>>>>> f3a37fc5fc48f8f1eff144c5da8d5bb6c16f16fa
 //email////////////////////////////////////////////////////////////////////////////////////
 var emailTemplates = require('email-templates');
 var templatesDir = path.join(__dirname, 'templates');
@@ -70,7 +76,7 @@ var mailer = nodemailer.createTransport("SMTP",{
 		user: "surfaceRealms.noreply@gmail.com",
 		pass: "boardsandgames1"
    }
-});
+ });
 //setup password encryption
 var bcrypt = require('bcrypt-nodejs');
 //encrypt password -> callback(err, hash)
@@ -83,14 +89,14 @@ var cryptPassword = function (password, callback) {
 		});
 	  }
   });
-};
+ };
 //decript password -> callback(bool matches)
 var comparePassword = function (password, hash, callback) {
    bcrypt.compare(password, hash, function (err, isPasswordMatch) {
 	  if (err) return callback(err);
 	  else return callback(null, isPasswordMatch);
    });
-};
+ };
 //start server
 var serverMap = {};
 OBG.listen(9001);
@@ -187,14 +193,17 @@ OBG.get('/', function (req, res){
 		});
 	}); 
  });
+//--------------------------------------------------------------------/////-find games page
 OBG.get('/matchmaking', function(req, res){
 	res.render('servers', mergeUser(req.signedCookies.user, {nav:"Servers", servers:serverMap}));
  });
+//--------------------------------------------------------------------/////-download clients
 OBG.get('/download', function(req, res){
 	res.render('download', mergeUser(req.signedCookies.user, {nav:"Download"}));
  });
 //--------------------------------------------------------------------/////-specific game page
 OBG.get('/game/:asset_pack_id', function (req, res){
+	req.sanitize('asset_pack_id').toString();
 	db.get("SELECT * from asset_packs WHERE asset_pack_id='"+req.params.asset_pack_id+"';", function(err, ass_pk){
 		db.all("SELECT * FROM stars WHERE asset_pack_id='"+req.params.asset_pack_id+"';",function(err, stars){
 			var starsVal = 0;
@@ -244,6 +253,10 @@ OBG.get('/auth', function(req, res){
  });
 //--------------------------------------------------------------------/////-request to sign up
 OBG.post('/signup', function(req, res){
+	req.sanitize('email').toString();
+	req.sanitize('username').toString();
+	req.sanitize('password').toString();
+	req.sanitize('confirm').toString();
 	var email = req.body.email.toLowerCase();
 	var username = req.body.username;
 	var password = req.body.password;
@@ -296,6 +309,8 @@ OBG.post('/signup', function(req, res){
  });
 //--------------------------------------------------------------------/////-request to sign in
 OBG.post('/signin', function(req, res){
+	req.sanitize('email').toString();
+	req.sanitize('password').toString();
 	var email = req.body.email.toLowerCase();
 	var password = req.body.password;
 	console.log("signing in with: " + email + password);
@@ -326,6 +341,7 @@ OBG.get('/logout', function(req, res){
 OBG.get('/activate', function(req, res){ res.render("activate", {nav:""}); });
 //--------------------------------------------------------------------/////-thanks for activating
 OBG.get('/activate/:user_id', function(req, res){ 
+	req.sanitize('user_id').toString();
 	db.serialize(function(){
 		db.run("UPDATE users SET activated='true' WHERE user_id='"+req.params.user_id+"';", function(err){
 			res.render("activated", {nav:""});
@@ -354,6 +370,10 @@ OBG.post('/delimage', function(req, res){
 OBG.post('/asset', function(req, res){
 	var user = JSON.parse(req.signedCookies.user);
 	if(user==undefined){res.redirect("/auth?m=You need to log in to upload games."); return}
+	
+	req.sanitize('ass_name').toString();
+	req.sanitize('add_desc').toString();
+	req.sanitize('ass_imgs').toString();
 	var name = req.body.ass_name;
 	var desc = req.body.ass_desc;
 	var imgs = req.body.ass_imgs;
@@ -378,6 +398,7 @@ OBG.post('/asset', function(req, res){
 //--------------------------------------------------------------------/////-set subscription
 OBG.post('/api/unsubscribe', function(req, res){
 	console.log("unsub");
+	req.sanitize('asset_pk_id').toString();
 	var ass = req.body.ass_pk_id;
 	if(req.signedCookies.user==undefined){
 		res.send(403, {error:"user not signed in", url:"/auth?m=Sign in to subscribe to content!"});
@@ -386,9 +407,10 @@ OBG.post('/api/unsubscribe', function(req, res){
 	user = JSON.parse(req.signedCookies.user);
 	db.run("DELETE FROM subscriptions WHERE user_id='"+user.user_id+"' and asset_pack_id='"+ass+"';");
  });
-//--------------------------------------------------------------------/////-set subscription
+//--------------------------------------------------------------------/////-set unsubscription
 OBG.post('/api/subscribe', function(req, res){
 	console.log("sub");
+	req.sanitize('asset_pk_id').toString();
 	var ass = req.body.ass_pk_id;
 	if(req.signedCookies.user==undefined){
 		res.send(403, {error:"user not signed in", url:"/auth?m=Sign in to subscribe to content!"});
@@ -400,11 +422,14 @@ OBG.post('/api/subscribe', function(req, res){
 		else res.send(200, {});
 	});
  });
-
+//--------------------------------------------------------------------/////-remote login
 OBG.post('/api/login', function(req, res){
 	if(req.body.email==undefined || req.body.password==undefined){
 		res.send(200, {success:false, error:"insufficient data"}); return;
 	}
+
+	req.sanitize('email').toString();
+	req.sanitize('password').toString();
 	var email = req.body.email.toLowerCase();
 	var password = req.body.password;
 
@@ -425,7 +450,7 @@ OBG.post('/api/login', function(req, res){
 		});
 	});
  });
-
+//--------------------------------------------------------------------/////-start a server
 OBG.post('/api/server_start', function(req, res){
 	var data = {
 		server_name:req.body.server_name,
@@ -433,18 +458,20 @@ OBG.post('/api/server_start', function(req, res){
 		max_num_players:req.body.max_num_players,
 		host_id:req.body.host_id,
 		server_passphrase:req.body.server_passphrase,
-		ip_address:req.connection.remoteAddress
+		ip_address:req.headers['X-Real-IP'] || req.connection.remoteAddress
 	}
+
+console.log(req.headers);
 	var new_server = server(data);
 	serverMap[new_server.hashCode] = new_server;
 	res.send(200, {success:true, gid:new_server.hashCode});
 	cacheArrayValid = false;
 	updateCache();
  });
-
+//--------------------------------------------------------------------/////-keep a server alive
 OBG.post('/api/server_heartbeat', function(req, res){
 	var pingtime = new Date().getTime() - req.connection._idleStart;
-	var gip = req.body.gip;
+	var gip = req.body.gid;
 	var num_players = req.body.num_players;
 	var ip = req.connection.remoteAddress;
 	if(gip==undefined || num_players==undefined) {res.send(200, {success:false, error:"insufficient data"}); return}
@@ -465,6 +492,7 @@ OBG.post('/api/server_heartbeat', function(req, res){
 		res.send(200, {success:false, error:"not started, must ping every 5000ms or less"});
 	}
  });
+//--------------------------------------------------------------------/////-get server info
 OBG.get('/api/server/:serverhash', function(req, res){
 	if(serverMap[req.params.serverhash]==undefined){
 		res.send(200, {success:false, error:"server does not exist"});
@@ -472,7 +500,7 @@ OBG.get('/api/server/:serverhash', function(req, res){
 	}
 	res.send(200, {success:true, server:serverMap[serverhash]});
  });
-
+//--------------------------------------------------------------------/////-get server list
 OBG.get('/api/servers', function(req, res){
 	if(cacheArrayValid)
 		res.send(200, {success:true, servers:cacheArray});
@@ -482,36 +510,44 @@ OBG.get('/api/servers', function(req, res){
 		})
 	}
  });
-
-
-OBG.get('/api/subs', function(req, res){
-	var user_id = req.query.user_id;
-	db.all("SELECT asset_pack_id, asset_version_id FROM subscriptions WHERE user_id='"+user_id+"';", function(err, subs){
-		if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
-		if(subs == undefined) subs = new Array();
-		for (var i = 0; i < subs.length; i++) {
-			if(subs[i].asset_version_id == null)
-				subs[i].download_url = "/api/asset/"+subs[i].asset_pack_id;
-			else
-				subs[i].download_url = "/api/asset/"+subs[i].asset_pack_id+"/"+subs[i].asset_version_id;
-		};
-		res.send(200, {success:true, subscriptions:subs})
+//--------------------------------------------------------------------/////-get subscriptions
+OBG.get('/api/subs/:user_id', function(req, res){
+	var user_id = req.params.user_id;
+	db.get("SELECT * FROM users WHERE user_id='"+user_id+"';", function(err, user){
+		if(err || user == undefined){res.send(200, {success:false, error:"user does not exist"}); return;}
+		db.all("SELECT asset_pack_id, asset_version_id FROM subscriptions WHERE user_id='"+user_id+"';", function(err, subs){
+			if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
+			if(subs == undefined) {res.send(200, {success:false, error:"user does not exist"}); return;}
+			for (var i = 0; i < subs.length; i++) {
+				if(subs[i].asset_version_id == null)
+					subs[i].download_url = "/api/asset/"+subs[i].asset_pack_id;
+				else
+					subs[i].download_url = "/api/asset/"+subs[i].asset_pack_id+"/"+subs[i].asset_version_id;
+			};
+			res.send(200, {success:true, subscriptions:subs});
+		});
 	});
-});
+ });
+//--------------------------------------------------------------------/////-download specific version of ass_pk
 OBG.get('/api/asset/:asset_pack_id/:asset_version_id', function(req, res){
 	db.get("SELECT asset_url FROM asset_Version WHERE asset_pack_id='"+req.params.asset_pack_id+"' AND asset_version_id='"+req.params.asset_version_id+"';", function(err, asset){
 		if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
-		if(asset==undefined){res.send(200, {success:false, error:"no such asset"});}
+		if(asset==undefined){res.send(200, {success:false, error:"no such asset"}); return;}
 		res.sendfile(__dirname+asset.asset_url); 
 	});
-});
+ });
+//--------------------------------------------------------------------/////-download newestof ass_pk
 OBG.get('/api/asset/:asset_pack_id/', function(req, res){
 	db.get("SELECT asset_url FROM asset_Version WHERE asset_pack_id='"+req.params.asset_pack_id+"' ORDER BY version DESC LIMIT 1 ", function(err, asset){
 		if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
 		if(asset==undefined){res.send(200, {success:false, error:"no such asset"});}
 		res.sendfile(__dirname+asset.asset_url); 
 	});
-});
+ });
+//--------------------------------------------------------------------/////-api call not found
+OBG.get('/api/*', function(req, res){
+	res.send(200, {success:false, error:"API call not found"});
+ });
 
 //404 Error start/////////////////////////////////////////////////////////////////////////
 OBG.get("*", function (req, res){
@@ -562,6 +598,7 @@ var server = function(options){
 	if(options.server_passphrase==undefined)
 		delete new_server.server_passphrase;
 	new_server.hash = function(){
+		
 		new_server.hashCode = new_server.ip_address.replace(/[.]/g, "_");
 		return new_server.hashCode;
 	}
@@ -591,4 +628,4 @@ var updateCache = function(callback){
 	cacheArrayValid = true;
 	if(callback!=undefined)
 		callback();
-}
+ }

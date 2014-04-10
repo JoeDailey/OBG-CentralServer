@@ -43,13 +43,12 @@ result:
 
 GETs
 =================
-/api/subs
+/api/subs/:user_id
 --------------
 ```
-query params:
-	user_id //is stored from login
 result:
 	{success:true, subscriptions:subs}
+	{success:false, error:"user does not exist"}
 	{success:false, error:err}
 ```
 

@@ -1,6 +1,5 @@
 <%include part_head %>
 <div style="margin:30px;">
-
 	<div class="col-sm-9 col-xs-12">
 		<% games.forEach(function(game) { %>
 			<%include part_asset_post %>
@@ -12,4 +11,11 @@
 		<% }); %>
 	</div>
 </div>
+<script>
+	$(document).ready(function(){
+		setTimeout(function(){
+			$(".asset-star").css("color","white");
+		},200);
+	});
+</script>
 <%include part_foot %>
