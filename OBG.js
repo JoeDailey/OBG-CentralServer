@@ -12,7 +12,7 @@ var exists = fs.existsSync(file);
 if (!exists) {
 	console.log("Creating DB file.");
 	fs.openSync(file, "w");
-}
+ }
 var sqlite3 = require("sqlite3").verbose();
 var db = new sqlite3.Database(file);
 if (!exists) {
@@ -25,13 +25,13 @@ if (!exists) {
 		db.run('CREATE TABLE "stars" ("user_id" Integer NOT NULL, "asset_pack_id" blob NOT NULL, "rating" integer NOT NULL);', function(err){ if(err) dberror("stars", err); });
 		db.run('CREATE TABLE "images" ("user_id" Integer NOT NULL, "asset_pack_id" blob NOT NULL, "image_url" blob NOT NULL);', function(err){ if(err) dberror("images", err); });
 	});
-}
+ }
 var dberror = function(table, err){
 	console.log(table, err);
 	console.log("deleting " + file);
 	if(fs.existsSync(file))
 		fs.unlink(file);
-}
+ }
 /////////END CREATE DATABASE
 //Database End/////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ OBG.use(express.session({secret: 'boardsandgamesandboards'}));
 OBG.use(express.bodyParser({uploadDir:__dirname + '/static/tmp/'}));
 OBG.set('view options', {
 	layout: false
-});
+ });
 //email////////////////////////////////////////////////////////////////////////////////////
 var emailTemplates = require('email-templates');
 var templatesDir = path.join(__dirname, 'templates');
@@ -68,7 +68,7 @@ var mailer = nodemailer.createTransport("SMTP",{
 		user: "surfaceRealms.noreply@gmail.com",
 		pass: "boardsandgames1"
    }
-});
+ });
 //setup password encryption
 var bcrypt = require('bcrypt-nodejs');
 //encrypt password -> callback(err, hash)
@@ -81,14 +81,14 @@ var cryptPassword = function (password, callback) {
 		});
 	  }
   });
-};
+ };
 //decript password -> callback(bool matches)
 var comparePassword = function (password, hash, callback) {
    bcrypt.compare(password, hash, function (err, isPasswordMatch) {
 	  if (err) return callback(err);
 	  else return callback(null, isPasswordMatch);
    });
-};
+ };
 //start server
 var serverMap = {};
 OBG.listen(9001);
@@ -138,9 +138,11 @@ OBG.get('/', function (req, res){
 		});
 	}); 
  });
+//--------------------------------------------------------------------/////-find games page
 OBG.get('/matchmaking', function(req, res){
 	res.render('servers', mergeUser(req.signedCookies.user, {nav:"Servers", servers:serverMap}));
  });
+//--------------------------------------------------------------------/////-download clients
 OBG.get('/download', function(req, res){
 	res.render('download', mergeUser(req.signedCookies.user, {nav:"Download"}));
  });
@@ -337,7 +339,7 @@ OBG.post('/api/unsubscribe', function(req, res){
 	user = JSON.parse(req.signedCookies.user);
 	db.run("DELETE FROM subscriptions WHERE user_id='"+user.user_id+"' and asset_pack_id='"+ass+"';");
  });
-//--------------------------------------------------------------------/////-set subscription
+//--------------------------------------------------------------------/////-set unsubscription
 OBG.post('/api/subscribe', function(req, res){
 	console.log("sub");
 	var ass = req.body.ass_pk_id;
@@ -351,7 +353,7 @@ OBG.post('/api/subscribe', function(req, res){
 		else res.send(200, {});
 	});
  });
-
+//--------------------------------------------------------------------/////-remote login
 OBG.post('/api/login', function(req, res){
 	if(req.body.email==undefined || req.body.password==undefined){
 		res.send(200, {success:false, error:"insufficient data"}); return;
@@ -376,7 +378,7 @@ OBG.post('/api/login', function(req, res){
 		});
 	});
  });
-
+//--------------------------------------------------------------------/////-start a server
 OBG.post('/api/server_start', function(req, res){
 	var data = {
 		server_name:req.body.server_name,
@@ -394,10 +396,10 @@ console.log(req.headers);
 	cacheArrayValid = false;
 	updateCache();
  });
-
+//--------------------------------------------------------------------/////-keep a server alive
 OBG.post('/api/server_heartbeat', function(req, res){
 	var pingtime = new Date().getTime() - req.connection._idleStart;
-	var gip = req.body.gip;
+	var gip = req.body.gid;
 	var num_players = req.body.num_players;
 	var ip = req.connection.remoteAddress;
 	if(gip==undefined || num_players==undefined) {res.send(200, {success:false, error:"insufficient data"}); return}
@@ -418,6 +420,7 @@ OBG.post('/api/server_heartbeat', function(req, res){
 		res.send(200, {success:false, error:"not started, must ping every 5000ms or less"});
 	}
  });
+//--------------------------------------------------------------------/////-get server info
 OBG.get('/api/server/:serverhash', function(req, res){
 	if(serverMap[req.params.serverhash]==undefined){
 		res.send(200, {success:false, error:"server does not exist"});
@@ -425,7 +428,7 @@ OBG.get('/api/server/:serverhash', function(req, res){
 	}
 	res.send(200, {success:true, server:serverMap[serverhash]});
  });
-
+//--------------------------------------------------------------------/////-get server list
 OBG.get('/api/servers', function(req, res){
 	if(cacheArrayValid)
 		res.send(200, {success:true, servers:cacheArray});
@@ -435,36 +438,44 @@ OBG.get('/api/servers', function(req, res){
 		})
 	}
  });
-
-
-OBG.get('/api/subs', function(req, res){
-	var user_id = req.query.user_id;
-	db.all("SELECT asset_pack_id, asset_version_id FROM subscriptions WHERE user_id='"+user_id+"';", function(err, subs){
-		if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
-		if(subs == undefined) subs = new Array();
-		for (var i = 0; i < subs.length; i++) {
-			if(subs[i].asset_version_id == null)
-				subs[i].download_url = "/api/asset/"+subs[i].asset_pack_id;
-			else
-				subs[i].download_url = "/api/asset/"+subs[i].asset_pack_id+"/"+subs[i].asset_version_id;
-		};
-		res.send(200, {success:true, subscriptions:subs})
+//--------------------------------------------------------------------/////-get subscriptions
+OBG.get('/api/subs/:user_id', function(req, res){
+	var user_id = req.params.user_id;
+	db.get("SELECT * FROM users WHERE user_id='"+user_id+"';", function(err, user){
+		if(err || user == undefined){res.send(200, {success:false, error:"user does not exist"}); return;}
+		db.all("SELECT asset_pack_id, asset_version_id FROM subscriptions WHERE user_id='"+user_id+"';", function(err, subs){
+			if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
+			if(subs == undefined) {res.send(200, {success:false, error:"user does not exist"}); return;}
+			for (var i = 0; i < subs.length; i++) {
+				if(subs[i].asset_version_id == null)
+					subs[i].download_url = "/api/asset/"+subs[i].asset_pack_id;
+				else
+					subs[i].download_url = "/api/asset/"+subs[i].asset_pack_id+"/"+subs[i].asset_version_id;
+			};
+			res.send(200, {success:true, subscriptions:subs});
+		});
 	});
-});
+ });
+//--------------------------------------------------------------------/////-download specific version of ass_pk
 OBG.get('/api/asset/:asset_pack_id/:asset_version_id', function(req, res){
 	db.get("SELECT asset_url FROM asset_Version WHERE asset_pack_id='"+req.params.asset_pack_id+"' AND asset_version_id='"+req.params.asset_version_id+"';", function(err, asset){
 		if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
-		if(asset==undefined){res.send(200, {success:false, error:"no such asset"});}
+		if(asset==undefined){res.send(200, {success:false, error:"no such asset"}); return;}
 		res.sendfile(__dirname+asset.asset_url); 
 	});
-});
+ });
+//--------------------------------------------------------------------/////-download newestof ass_pk
 OBG.get('/api/asset/:asset_pack_id/', function(req, res){
 	db.get("SELECT asset_url FROM asset_Version WHERE asset_pack_id='"+req.params.asset_pack_id+"' ORDER BY version DESC LIMIT 1 ", function(err, asset){
 		if(err){res.send(200, {success:false, error:err}); console.log(err); return;}
 		if(asset==undefined){res.send(200, {success:false, error:"no such asset"});}
 		res.sendfile(__dirname+asset.asset_url); 
 	});
-});
+ });
+//--------------------------------------------------------------------/////-api call not found
+OBG.get('/api/*', function(req, res){
+	res.send(200, {success:false, error:"API call not found"});
+ });
 
 //404 Error start/////////////////////////////////////////////////////////////////////////
 OBG.get("*", function (req, res){
@@ -554,4 +565,4 @@ var updateCache = function(callback){
 	cacheArrayValid = true;
 	if(callback!=undefined)
 		callback();
-}
+ }

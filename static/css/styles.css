@@ -128,3 +128,7 @@ body{
 			float: right;
 			padding-right: 25px;
 		}
+
+.form-control{
+	margin-bottom: 7px;
+}
