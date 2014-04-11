@@ -59,13 +59,9 @@ OBG.use(express.bodyParser({uploadDir:__dirname + '/static/tmp/'}));
 OBG.use(expressValidator({}));
 OBG.set('view options', {
 	layout: false
-<<<<<<< HEAD
 });
-//
+//remote requests//////////////////////////////////////////////////////////////////////////
 var https = require('https');
-=======
- });
->>>>>>> f3a37fc5fc48f8f1eff144c5da8d5bb6c16f16fa
 //email////////////////////////////////////////////////////////////////////////////////////
 var emailTemplates = require('email-templates');
 var templatesDir = path.join(__dirname, 'templates');
@@ -105,11 +101,12 @@ OBG.listen(9001);
 //RoutingStart///////////////////////////////////////////////////////////////////////////
 //--------------------------------------------------------------------/////-landing page
 OBG.get('/', function (req, res){
-	var gitevents;
+	var gitevents = new Array();
+	var ass_pks;
 	var lock = 0;
 	var options = {
 		host:"api.github.com",
-		path:"/repos/phonyphonecall/AssetGenerator/events",
+		path:"/repos/phonyphonecall/AssetGenerator/events?client_id=ec027252dec5d32af078&client_secret=809d41ebea578e9c2b967bcbc0a3286542b724b0",
 		headers:{
 			"User-Agent":"SurfaceRealms-JoeDailey"
 		},
@@ -122,15 +119,21 @@ OBG.get('/', function (req, res){
 		});
 		response.on('end', function() {
 			data = JSON.parse(data);
+			// console.log(gitevents);
 			data.forEach(function (update) {
 				gitevents.push(update);
+				// console.log(update);
 			});
 			lock++;
+			if(lock>=3){
+				console.log(gitevents);
+				res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:gitevents}));
+			}
 		});
 	}).end();
 	var options = {
 		host:"api.github.com",
-		path:"/repos/SpexGuy/OnlineBoardGame/events",
+		path:"/repos/SpexGuy/OnlineBoardGame/events?client_id=xxxx&client_secret=yyyy",
 		headers:{
 			"User-Agent":"SurfaceRealms-JoeDailey"
 		},
@@ -148,13 +151,21 @@ OBG.get('/', function (req, res){
 			});
 			lock++;
 			if(lock>=3){
-
+				console.log(gitevents);
+				res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:gitevents}));
 			}
 		});
 	}).end();
-	db.all("SELECT asset_packs.*, img.image_url FROM asset_packs INNER JOIN images AS img ON asset_packs.asset_pack_id=img.asset_pack_id GROUP BY asset_packs.asset_pack_id;", function(err, ass_pks){	
+	db.all("SELECT asset_packs.*, img.image_url FROM asset_packs INNER JOIN images AS img ON asset_packs.asset_pack_id=img.asset_pack_id GROUP BY asset_packs.asset_pack_id;", function(err, asses){	
+		ass_pks = asses;
 		if(err) console.log(err);
-		if(ass_pks==undefined || ass_pks.length==0){console.log("wat?"); res.render("home", mergeUser(req.signedCookies.user, {nav:"Popular", games:[], updates:["a","a","a"]})); return;};
+		if(ass_pks==undefined || ass_pks.length==0){ 
+			ass_pks=new Array()
+			lock++;
+			if(lock >= 3)
+				res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:gitevents}));
+			return;
+		}
 		var count = -1*ass_pks.length;
 		ass_pks.forEach(function(ass_pk, i) {
 			db.all("SELECT * FROM stars WHERE asset_pack_id='"+ass_pk.asset_pack_id+"';",function(err, stars, i){
@@ -185,8 +196,11 @@ OBG.get('/', function (req, res){
 					
 					count++;
 					if(count === 0){
-						console.log(ass_pks);
-						res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:["a","a","a"]}));
+						lock++;
+						if(lock>=3){
+				console.log(gitevents);
+							res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:gitevents}));
+						}
 					}
 				});
 			});

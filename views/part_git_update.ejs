@@ -1,9 +1,32 @@
 <style type="text/css">
 	.git-update{
-		height: 20px;
-		background: white;
+		padding: 10px;
+		background: rgba(0,0,0,0.7);
+	}
+	.update-user-image{
+		width: 50px;
+		height: 50px;
+		float: left;
+	}
+	.update-user-image img{
+		width: 100%;
+		margin-right: 7px;
+	}
+	.update-user-name{
+		color: white;
+		float:left;
 	}
 </style>
 <div class="col-md-12 git-update">
-
+	<a href="http://github.com/<%= update.actor.login %>" class="update-user-image">
+		<img src="<%= update.actor.avatar_url %>" >
+	</a>
+	<a href="<%= update.actor.url %>" class="update-user-name">
+		<%= update.actor.login %>
+	</a>
+	<span class="action">pushed to</span>
+	<a href="http://github.com<%= update.repo.name %>" class="update-repo-name">
+		<%= update.repo.name %>
+	</a>
+	<div class="clearfix"></div>
 </div>
