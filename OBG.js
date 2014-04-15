@@ -209,12 +209,11 @@ var sendOff = function(req, res, gitevents, ass_pks){
 		var keyA = new Date(a.created_at).getTime(),
 		keyB = new Date(b.created_at).getTime();
 		// Compare the 2 dates
-		if(keyA < keyB) return -1;
-		if(keyA > keyB) return 1;
+		if(keyA < keyB) return 1;
+		if(keyA > keyB) return -1;
 		return 0;
 	});
-	console.log(gitevents[3]);
-	console.log(month[new Date(gitevents[3].created_at).getMonth()] + " " + new Date(gitevents[3].created_at).getDate());
+	gitevents = gitevents.slice(0,16);
 	var totes = 0;
 	gitevents.forEach(function(commit){
 		commit.date = month[new Date(commit.created_at).getMonth()] + " " + new Date(commit.created_at).getDate() +"'";
