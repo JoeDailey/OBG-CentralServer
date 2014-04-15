@@ -137,7 +137,6 @@ post("/api/login", {"email":"josephldailey@gmail.com", "password":"as123df"}, fu
 post("/api/server_start", {server_name:"The Server", game_name:"The game of Life", max_num_players:8, host_id:1}, function(err, data, path){
 	if(data.success == true){
 		success(path);
-		console.log(data.gid);
 		post("/api/server_heartbeat", {gid:data.gid, num_players:5}, function(err, data, path){
 			if(data.success == true)
 				success(path);
@@ -162,11 +161,8 @@ post("/api/server_start", {server_name:"The Server", game_name:"The game of Life
 post("/api/server_heartbeat", {gid:"1234", num_players:-1}, function(err, data, path){
 	if(data.success==false){
 		success(path);
-		console.log("Asdf");
 	}
 	else{
-
-		console.log("qwer");
 		fail(path);
 	}
 });

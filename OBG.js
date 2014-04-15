@@ -126,14 +126,13 @@ OBG.get('/', function (req, res){
 			});
 			lock++;
 			if(lock>=3){
-				console.log(gitevents);
-				res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:gitevents}));
+				sendOff(req, res, gitevents, games);
 			}
 		});
 	}).end();
 	var options = {
 		host:"api.github.com",
-		path:"/repos/SpexGuy/OnlineBoardGame/events?client_id=xxxx&client_secret=yyyy",
+		path:"/repos/SpexGuy/OnlineBoardGame/events?client_id=ec027252dec5d32af078&client_secret=809d41ebea578e9c2b967bcbc0a3286542b724b0",
 		headers:{
 			"User-Agent":"SurfaceRealms-JoeDailey"
 		},
@@ -151,8 +150,7 @@ OBG.get('/', function (req, res){
 			});
 			lock++;
 			if(lock>=3){
-				console.log(gitevents);
-				res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:gitevents}));
+				sendOff(req, res, gitevents, games);
 			}
 		});
 	}).end();
@@ -163,7 +161,7 @@ OBG.get('/', function (req, res){
 			ass_pks=new Array()
 			lock++;
 			if(lock >= 3)
-				res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:gitevents}));
+				sendOff(req, res, gitevents, ass_pks)
 			return;
 		}
 		var count = -1*ass_pks.length;
@@ -193,13 +191,12 @@ OBG.get('/', function (req, res){
 					}
 					ass_pk.is_subbed = is_subbed;
 					ass_pk.count = subs.length;
-					
+					games = ass_pks;
 					count++;
 					if(count === 0){
 						lock++;
 						if(lock>=3){
-				console.log(gitevents);
-							res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:gitevents}));
+							sendOff(req, res, gitevents, ass_pks)
 						}
 					}
 				});
@@ -207,6 +204,25 @@ OBG.get('/', function (req, res){
 		});
 	}); 
  });
+var sendOff = function(req, res, gitevents, ass_pks){
+	gitevents.sort(function(a, b){
+		var keyA = new Date(a.created_at).getTime(),
+		keyB = new Date(b.created_at).getTime();
+		// Compare the 2 dates
+		if(keyA < keyB) return -1;
+		if(keyA > keyB) return 1;
+		return 0;
+	});
+	console.log(gitevents[3]);
+	console.log(month[new Date(gitevents[3].created_at).getMonth()] + " " + new Date(gitevents[3].created_at).getDate());
+	var totes = 0;
+	gitevents.forEach(function(commit){
+		commit.date = month[new Date(commit.created_at).getMonth()] + " " + new Date(commit.created_at).getDate() +"'";
+			totes++;
+			if(totes>=gitevents.length)
+				res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:gitevents}));
+	});
+}
 //--------------------------------------------------------------------/////-find games page
 OBG.get('/matchmaking', function(req, res){
 	res.render('servers', mergeUser(req.signedCookies.user, {nav:"Servers", servers:serverMap}));
@@ -594,13 +610,18 @@ var authError = function(e, res){
 	console.log(e);
 	res.redirect("/auth?m="+e);
  }
-var compare = function(a,b) {
-  // if (a.last_nom < b.last_nom)
-  //    return -1;
-  // if (a.last_nom > b.last_nom)
-  //   return 1;
-  return 0;
- }
+var month = ["January"
+			,"February"
+			,"March"
+			,"April"
+			,"May"
+			,"June"
+			,"July"
+			,"August"
+			,"September"
+			,"October"
+			,"November"
+			,"December"];
 //Misc End//////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
 //consructors/////////////////////////////////////////////////////////////////////////////

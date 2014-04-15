@@ -1,0 +1,2257 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for OBG-CentralServer/OBG.js</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../prettify.css">
+
+    <style>
+        body, html {
+            margin:0; padding: 0;
+        }
+        body {
+            font-family: Helvetica Neue, Helvetica,Arial;
+            font-size: 10pt;
+        }
+        div.header, div.footer {
+            background: #eee;
+            padding: 1em;
+        }
+        div.header {
+            z-index: 100;
+            position: fixed;
+            top: 0;
+            border-bottom: 1px solid #666;
+            width: 100%;
+        }
+        div.footer {
+            border-top: 1px solid #666;
+        }
+        div.body {
+            margin-top: 10em;
+        }
+        div.meta {
+            font-size: 90%;
+            text-align: center;
+        }
+        h1, h2, h3 {
+            font-weight: normal;
+        }
+        h1 {
+            font-size: 12pt;
+        }
+        h2 {
+            font-size: 10pt;
+        }
+        pre {
+            font-family: Consolas, Menlo, Monaco, monospace;
+            margin: 0;
+            padding: 0;
+            line-height: 14px;
+            font-size: 14px;
+            -moz-tab-size: 2;
+            -o-tab-size:  2;
+            tab-size: 2;
+        }
+
+        div.path { font-size: 110%; }
+        div.path a:link, div.path a:visited { color: #000; }
+        table.coverage { border-collapse: collapse; margin:0; padding: 0 }
+
+        table.coverage td {
+            margin: 0;
+            padding: 0;
+            color: #111;
+            vertical-align: top;
+        }
+        table.coverage td.line-count {
+            width: 50px;
+            text-align: right;
+            padding-right: 5px;
+        }
+        table.coverage td.line-coverage {
+            color: #777 !important;
+            text-align: right;
+            border-left: 1px solid #666;
+            border-right: 1px solid #666;
+        }
+
+        table.coverage td.text {
+        }
+
+        table.coverage td span.cline-any {
+            display: inline-block;
+            padding: 0 5px;
+            width: 40px;
+        }
+        table.coverage td span.cline-neutral {
+            background: #eee;
+        }
+        table.coverage td span.cline-yes {
+            background: #b5d592;
+            color: #999;
+        }
+        table.coverage td span.cline-no {
+            background: #fc8c84;
+        }
+
+        .cstat-yes { color: #111; }
+        .cstat-no { background: #fc8c84; color: #111; }
+        .fstat-no { background: #ffc520; color: #111 !important; }
+        .cbranch-no { background:  yellow !important; color: #111; }
+
+        .cstat-skip { background: #ddd; color: #111; }
+        .fstat-skip { background: #ddd; color: #111 !important; }
+        .cbranch-skip { background: #ddd !important; color: #111; }
+
+        .missing-if-branch {
+            display: inline-block;
+            margin-right: 10px;
+            position: relative;
+            padding: 0 4px;
+            background: black;
+            color: yellow;
+        }
+
+        .skip-if-branch {
+            display: none;
+            margin-right: 10px;
+            position: relative;
+            padding: 0 4px;
+            background: #ccc;
+            color: white;
+        }
+
+        .missing-if-branch .typ, .skip-if-branch .typ {
+            color: inherit !important;
+        }
+
+        .entity, .metric { font-weight: bold; }
+        .metric { display: inline-block; border: 1px solid #333; padding: 0.3em; background: white; }
+        .metric small { font-size: 80%; font-weight: normal; color: #666; }
+
+        div.coverage-summary table { border-collapse: collapse; margin: 3em; font-size: 110%; }
+        div.coverage-summary td, div.coverage-summary table  th { margin: 0; padding: 0.25em 1em; border-top: 1px solid #666; border-bottom: 1px solid #666; }
+        div.coverage-summary th { text-align: left; border: 1px solid #666; background: #eee; font-weight: normal; }
+        div.coverage-summary th.file { border-right: none !important; }
+        div.coverage-summary th.pic { border-left: none !important; text-align: right; }
+        div.coverage-summary th.pct { border-right: none !important; }
+        div.coverage-summary th.abs { border-left: none !important; text-align: right; }
+        div.coverage-summary td.pct { text-align: right; border-left: 1px solid #666; }
+        div.coverage-summary td.abs { text-align: right; font-size: 90%; color: #444; border-right: 1px solid #666; }
+        div.coverage-summary td.file { text-align: right; border-left: 1px solid #666; white-space: nowrap;  }
+        div.coverage-summary td.pic { min-width: 120px !important;  }
+        div.coverage-summary a:link { text-decoration: none; color: #000; }
+        div.coverage-summary a:visited { text-decoration: none; color: #333; }
+        div.coverage-summary a:hover { text-decoration: underline; }
+        div.coverage-summary tfoot td { border-top: 1px solid #666; }
+
+        div.coverage-summary .yui3-datatable-sort-indicator, div.coverage-summary .dummy-sort-indicator {
+            height: 10px;
+            width: 7px;
+            display: inline-block;
+            margin-left: 0.5em;
+        }
+        div.coverage-summary .yui3-datatable-sort-indicator {
+            background: url("http://yui.yahooapis.com/3.6.0/build/datatable-sort/assets/skins/sam/sort-arrow-sprite.png") no-repeat scroll 0 0 transparent;
+        }
+        div.coverage-summary .yui3-datatable-sorted .yui3-datatable-sort-indicator {
+            background-position: 0 -20px;
+        }
+        div.coverage-summary .yui3-datatable-sorted-desc .yui3-datatable-sort-indicator {
+            background-position: 0 -10px;
+        }
+
+        .high { background: #b5d592 !important; }
+        .medium { background: #ffe87c !important; }
+        .low { background: #fc8c84 !important; }
+
+        span.cover-fill, span.cover-empty {
+            display:inline-block;
+            border:1px solid #444;
+            background: white;
+            height: 12px;
+        }
+        span.cover-fill {
+            background: #ccc;
+            border-right: 1px solid #444;
+        }
+        span.cover-empty {
+            background: white;
+            border-left: none;
+        }
+        span.cover-full {
+            border-right: none !important;
+        }
+        pre.prettyprint {
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .com { color: #999 !important; }
+        .ignore-none { color: #999; font-weight: normal; }
+
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">OBG-CentralServer/OBG.js</span></h1>
+    <h2>
+        
+        Statements: <span class="metric">13.04% <small>(66 / 506)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Branches: <span class="metric">1.14% <small>(2 / 175)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Functions: <span class="metric">0% <small>(0 / 98)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Lines: <span class="metric">16.22% <small>(66 / 407)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">OBG-CentralServer/</a> &#187; OBG.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586
+587
+588
+589
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601
+602
+603
+604
+605
+606
+607
+608
+609
+610
+611
+612
+613
+614
+615
+616
+617
+618
+619
+620
+621
+622
+623
+624
+625
+626
+627
+628
+629
+630
+631
+632
+633
+634
+635
+636
+637
+638
+639
+640
+641
+642
+643
+644
+645
+646</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+	All following code and comments written by Joseph L Dailey unless stated otherwise
+	All Rights Reserved
+*/
+//Database Start//////////////////////////////////////////////////////////////////////////
+var fs = require("fs");
+////////CREATE DATABSE IF IT DOESN'T EXIST
+var file = __dirname + "/db.sqlite";
+var path = require('path');
+var exists = fs.existsSync(file);
+&nbsp;
+<span class="missing-if-branch" title="if path not taken" >I</span>if (!exists) {
+<span class="cstat-no" title="statement not covered" >	console.log("Creating DB file.");</span>
+<span class="cstat-no" title="statement not covered" >	fs.openSync(file, "w");</span>
+ }
+var sqlite3 = require("sqlite3").verbose();
+var db = new sqlite3.Database(file);
+<span class="missing-if-branch" title="if path not taken" >I</span>if (!exists) {
+<span class="cstat-no" title="statement not covered" >	db.serialize(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >		db.run('CREATE TABLE "users" ("user_id" Integer Primary Key NOT NULL UNIQUE, "user_email" blob NOT NULL, "user_name" blob NOT NULL, "activated" boolean NOT NULL DEFAULT false, "created_at" DATETIME NOT NULL  DEFAULT CURRENT_TIMESTAMP);', <span class="fstat-no" title="function not covered" >function(err){</span> <span class="cstat-no" title="statement not covered" >if("users", err) <span class="cstat-no" title="statement not covered" >dberror(err); </span></span>});</span>
+<span class="cstat-no" title="statement not covered" >		db.run('CREATE TABLE "passwords" ("user_id" Integer NOT NULL UNIQUE, "hash" blob NOT NULL);', <span class="fstat-no" title="function not covered" >function(err){</span> <span class="cstat-no" title="statement not covered" >if(err) <span class="cstat-no" title="statement not covered" >dberror("passwords", err); </span></span>});</span>
+<span class="cstat-no" title="statement not covered" >		db.run('CREATE TABLE "asset_packs" ("asset_pack_id" blob NOT NULL, "asset_pack_name" blob NOT NULL, "user_id" Integer NOT NULL, "description" blob, "created_at" DATETIME NOT NULL  DEFAULT CURRENT_TIMESTAMP);', <span class="fstat-no" title="function not covered" >function( err){</span> <span class="cstat-no" title="statement not covered" >if("asset_packs", err) <span class="cstat-no" title="statement not covered" >dberror(err); </span></span>});</span>
+<span class="cstat-no" title="statement not covered" >		db.run('CREATE TABLE "asset_version" ("asset_version_id" integer Primary Key  NOT NULL, "asset_pack_id" blob NOT NULL, "asset_url" blob NOT NULL, "change_log" blob, "version" real NOT NULL, "created_at" DATETIME NOT NULL  DEFAULT CURRENT_TIMESTAMP);', <span class="fstat-no" title="function not covered" >function(err){</span> <span class="cstat-no" title="statement not covered" >if("asset_Versions", err) <span class="cstat-no" title="statement not covered" >dberror(err); </span></span>})</span>
+<span class="cstat-no" title="statement not covered" >		db.run('CREATE TABLE "subscriptions" ("user_id" Integer NOT NULL, "asset_pack_id" blob NOT NULL, "asset_version_id" integer);', <span class="fstat-no" title="function not covered" >function(err){</span> <span class="cstat-no" title="statement not covered" >if(err) <span class="cstat-no" title="statement not covered" >dberror("subscriptions", err); </span></span>});</span>
+<span class="cstat-no" title="statement not covered" >		db.run('CREATE TABLE "stars" ("user_id" Integer NOT NULL, "asset_pack_id" blob NOT NULL, "rating" integer NOT NULL);', <span class="fstat-no" title="function not covered" >function(err){</span> <span class="cstat-no" title="statement not covered" >if(err) <span class="cstat-no" title="statement not covered" >dberror("stars", err); </span></span>});</span>
+<span class="cstat-no" title="statement not covered" >		db.run('CREATE TABLE "images" ("user_id" Integer NOT NULL, "asset_pack_id" blob NOT NULL, "image_url" blob NOT NULL);', <span class="fstat-no" title="function not covered" >function(err){</span> <span class="cstat-no" title="statement not covered" >if(err) <span class="cstat-no" title="statement not covered" >dberror("images", err); </span></span>});</span>
+	});
+ }
+var dberror = <span class="fstat-no" title="function not covered" >function(table, err){</span>
+<span class="cstat-no" title="statement not covered" >	console.log(table, err);</span>
+<span class="cstat-no" title="statement not covered" >	console.log("deleting " + file);</span>
+<span class="cstat-no" title="statement not covered" >	if(fs.existsSync(file))</span>
+<span class="cstat-no" title="statement not covered" >		fs.unlink(file);</span>
+ }
+/////////END CREATE DATABASE
+//Database End/////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//Set Up Start///////////////////////////////////////////////////////////////////////////
+//rendering///////////////////////////////////////////////////////////////////////////// 
+var express = require('express');
+var expressValidator = require('express-validator');
+var OBG = express();
+OBG.set('view engine', 'ejs');
+//uuid/////////////////////////////////////////////////////////////////////////////////////
+var uuid = require('node-uuid');
+//file moving//////////////////////////////////////////////////////////////////////////////
+&nbsp;
+//email////////////////////////////////////////////////////////////////////////////////////
+OBG.set("views", __dirname+'/views');
+//path/////////////////////////////////////////////////////////////////////////////////////
+OBG.use("/static", express.static(__dirname + '/static')); //static
+//favicon//////////////////////////////////////////////////////////////////////////////////
+OBG.use(express.favicon(__dirname + '/static/img/favicon.png'));
+//cookies//////////////////////////////////////////////////////////////////////////////////
+OBG.use(express.cookieParser('gamesandboardsandgames'));
+OBG.use(express.session({secret: 'boardsandgamesandboards'}));
+//body parsing/////////////////////////////////////////////////////////////////////////////
+OBG.use(express.bodyParser({uploadDir:__dirname + '/static/tmp/'}));
+OBG.use(expressValidator({}));
+OBG.set('view options', {
+	layout: false
+});
+//remote requests//////////////////////////////////////////////////////////////////////////
+var https = require('https');
+//email////////////////////////////////////////////////////////////////////////////////////
+var emailTemplates = require('email-templates');
+var templatesDir = path.join(__dirname, 'templates');
+var nodemailer = require('nodemailer');
+var mailer = nodemailer.createTransport("SMTP",{
+   service: "Gmail",
+   auth: {
+		user: "surfaceRealms.noreply@gmail.com",
+		pass: "boardsandgames1"
+   }
+ });
+//setup password encryption
+var bcrypt = require('bcrypt-nodejs');
+//encrypt password -&gt; callback(err, hash)
+var cryptPassword = <span class="fstat-no" title="function not covered" >function (password, callback) {</span>
+<span class="cstat-no" title="statement not covered" >   bcrypt.genSalt(10, <span class="fstat-no" title="function not covered" >function (err, salt) {</span></span>
+<span class="cstat-no" title="statement not covered" >	if (err) <span class="cstat-no" title="statement not covered" >return callback(err);</span></span>
+	  else {
+<span class="cstat-no" title="statement not covered" >		bcrypt.hash(password, salt, null, <span class="fstat-no" title="function not covered" >function (err, hash) {</span></span>
+<span class="cstat-no" title="statement not covered" >			return callback(err, hash);</span>
+		});
+	  }
+  });
+ };
+//decript password -&gt; callback(bool matches)
+var comparePassword = <span class="fstat-no" title="function not covered" >function (password, hash, callback) {</span>
+<span class="cstat-no" title="statement not covered" >   bcrypt.compare(password, hash, <span class="fstat-no" title="function not covered" >function (err, isPasswordMatch) {</span></span>
+<span class="cstat-no" title="statement not covered" >	  if (err) <span class="cstat-no" title="statement not covered" >return callback(err);</span></span>
+	  else <span class="cstat-no" title="statement not covered" >return callback(null, isPasswordMatch);</span>
+   });
+ };
+//start server
+var serverMap = {};
+OBG.listen(9001);
+//Set Up End///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//RoutingStart///////////////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------------/////-landing page
+OBG.get('/', <span class="fstat-no" title="function not covered" >function (req, res){</span>
+<span class="cstat-no" title="statement not covered" >	var gitevents = new Array();</span>
+<span class="cstat-no" title="statement not covered" >	var ass_pks;</span>
+<span class="cstat-no" title="statement not covered" >	var lock = 0;</span>
+<span class="cstat-no" title="statement not covered" >	var options = {</span>
+		host:"api.github.com",
+		path:"/repos/phonyphonecall/AssetGenerator/events?client_id=ec027252dec5d32af078&amp;client_secret=809d41ebea578e9c2b967bcbc0a3286542b724b0",
+		headers:{
+			"User-Agent":"SurfaceRealms-JoeDailey"
+		},
+		method: 'GET'
+	}
+<span class="cstat-no" title="statement not covered" >	https.request(options , <span class="fstat-no" title="function not covered" >function(response){</span></span>
+<span class="cstat-no" title="statement not covered" >		var data = "";</span>
+<span class="cstat-no" title="statement not covered" >		response.on('data', <span class="fstat-no" title="function not covered" >function(chunk) {</span></span>
+<span class="cstat-no" title="statement not covered" >			data += chunk;</span>
+		});
+<span class="cstat-no" title="statement not covered" >		response.on('end', <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >			data = JSON.parse(data);</span>
+			// console.log(gitevents);
+<span class="cstat-no" title="statement not covered" >			data.forEach(<span class="fstat-no" title="function not covered" >function (update) {</span></span>
+<span class="cstat-no" title="statement not covered" >				gitevents.push(update);</span>
+				// console.log(update);
+			});
+<span class="cstat-no" title="statement not covered" >			lock++;</span>
+<span class="cstat-no" title="statement not covered" >			if(lock&gt;=3){</span>
+<span class="cstat-no" title="statement not covered" >				console.log(gitevents);</span>
+<span class="cstat-no" title="statement not covered" >				res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:gitevents}));</span>
+			}
+		});
+	}).end();
+<span class="cstat-no" title="statement not covered" >	var options = {</span>
+		host:"api.github.com",
+		path:"/repos/SpexGuy/OnlineBoardGame/events?client_id=xxxx&amp;client_secret=yyyy",
+		headers:{
+			"User-Agent":"SurfaceRealms-JoeDailey"
+		},
+		method: 'GET'
+	}
+<span class="cstat-no" title="statement not covered" >	https.request(options , <span class="fstat-no" title="function not covered" >function(response){</span></span>
+<span class="cstat-no" title="statement not covered" >		var data = "";</span>
+<span class="cstat-no" title="statement not covered" >		response.on('data', <span class="fstat-no" title="function not covered" >function(chunk) {</span></span>
+<span class="cstat-no" title="statement not covered" >			data += chunk;</span>
+		});
+<span class="cstat-no" title="statement not covered" >		response.on('end', <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >			data = JSON.parse(data);</span>
+<span class="cstat-no" title="statement not covered" >			data.forEach(<span class="fstat-no" title="function not covered" >function (update) {</span></span>
+<span class="cstat-no" title="statement not covered" >				gitevents.push(update);</span>
+			});
+<span class="cstat-no" title="statement not covered" >			lock++;</span>
+<span class="cstat-no" title="statement not covered" >			if(lock&gt;=3){</span>
+<span class="cstat-no" title="statement not covered" >				console.log(gitevents);</span>
+<span class="cstat-no" title="statement not covered" >				res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:gitevents}));</span>
+			}
+		});
+	}).end();
+<span class="cstat-no" title="statement not covered" >	db.all("SELECT asset_packs.*, img.image_url FROM asset_packs INNER JOIN images AS img ON asset_packs.asset_pack_id=img.asset_pack_id GROUP BY asset_packs.asset_pack_id;", <span class="fstat-no" title="function not covered" >function(err, asses){	</span></span>
+<span class="cstat-no" title="statement not covered" >		ass_pks = asses;</span>
+<span class="cstat-no" title="statement not covered" >		if(err) <span class="cstat-no" title="statement not covered" >console.log(err);</span></span>
+<span class="cstat-no" title="statement not covered" >		if(ass_pks==undefined || ass_pks.length==0){ </span>
+<span class="cstat-no" title="statement not covered" >			ass_pks=new Array()</span>
+<span class="cstat-no" title="statement not covered" >			lock++;</span>
+<span class="cstat-no" title="statement not covered" >			if(lock &gt;= 3)</span>
+<span class="cstat-no" title="statement not covered" >				res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:gitevents}));</span>
+<span class="cstat-no" title="statement not covered" >			return;</span>
+		}
+<span class="cstat-no" title="statement not covered" >		var count = -1*ass_pks.length;</span>
+<span class="cstat-no" title="statement not covered" >		ass_pks.forEach(<span class="fstat-no" title="function not covered" >function(ass_pk, i) {</span></span>
+<span class="cstat-no" title="statement not covered" >			db.all("SELECT * FROM stars WHERE asset_pack_id='"+ass_pk.asset_pack_id+"';",<span class="fstat-no" title="function not covered" >function(err, stars, i){</span></span>
+<span class="cstat-no" title="statement not covered" >				if(err) <span class="cstat-no" title="statement not covered" >console.log(err);</span></span>
+<span class="cstat-no" title="statement not covered" >				if(err || stars==undefined) <span class="cstat-no" title="statement not covered" >stars=new Array();</span></span>
+<span class="cstat-no" title="statement not covered" >				var starsVal = 0;</span>
+<span class="cstat-no" title="statement not covered" >				for (var s = 0; s &lt; stars.length; s++) {</span>
+<span class="cstat-no" title="statement not covered" >					console.log("i-sloop"+s+": "+i);</span>
+<span class="cstat-no" title="statement not covered" >					starsVal += stars[s].rating;</span>
+				}
+<span class="cstat-no" title="statement not covered" >				if(stars.length == 0)</span>
+<span class="cstat-no" title="statement not covered" >					ass_pk.stars = 0;</span>
+				else
+<span class="cstat-no" title="statement not covered" >					ass_pks.stars = Math.floor(starsVal/stars.length);</span>
+<span class="cstat-no" title="statement not covered" >				db.all("SELECT user_id FROM subscriptions WHERE asset_pack_id='"+ass_pk.asset_pack_id+"';", <span class="fstat-no" title="function not covered" >function(err, subs, i){</span></span>
+<span class="cstat-no" title="statement not covered" >					console.log(subs);</span>
+<span class="cstat-no" title="statement not covered" >					if(err){ <span class="cstat-no" title="statement not covered" >console.log(err); <span class="cstat-no" title="statement not covered" ></span>subs = new Array() }</span>;</span>
+<span class="cstat-no" title="statement not covered" >					if(subs==undefined) <span class="cstat-no" title="statement not covered" >subs = new Array();</span></span>
+<span class="cstat-no" title="statement not covered" >					var is_subbed = false;</span>
+<span class="cstat-no" title="statement not covered" >					if(req.signedCookies.user != undefined){</span>
+<span class="cstat-no" title="statement not covered" >						var user_id = JSON.parse(req.signedCookies.user).user_id;</span>
+<span class="cstat-no" title="statement not covered" >						for (var sub = 0; sub &lt; subs.length; sub++)</span>
+<span class="cstat-no" title="statement not covered" >							if(subs[sub].user_id == user_id)</span>
+<span class="cstat-no" title="statement not covered" >								is_subbed = true;</span>
+					}
+<span class="cstat-no" title="statement not covered" >					ass_pk.is_subbed = is_subbed;</span>
+<span class="cstat-no" title="statement not covered" >					ass_pk.count = subs.length;</span>
+					
+<span class="cstat-no" title="statement not covered" >					count++;</span>
+<span class="cstat-no" title="statement not covered" >					if(count === 0){</span>
+<span class="cstat-no" title="statement not covered" >						lock++;</span>
+<span class="cstat-no" title="statement not covered" >						if(lock&gt;=3){</span>
+<span class="cstat-no" title="statement not covered" >				console.log(gitevents);</span>
+<span class="cstat-no" title="statement not covered" >							res.render('home', mergeUser(req.signedCookies.user, {nav:"Popular", games:ass_pks, updates:gitevents}));</span>
+						}
+					}
+				});
+			});
+		});
+	}); 
+ });
+//--------------------------------------------------------------------/////-find games page
+OBG.get('/matchmaking', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	res.render('servers', mergeUser(req.signedCookies.user, {nav:"Servers", servers:serverMap}));</span>
+ });
+//--------------------------------------------------------------------/////-download clients
+OBG.get('/download', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	res.render('download', mergeUser(req.signedCookies.user, {nav:"Download"}));</span>
+ });
+//--------------------------------------------------------------------/////-specific game page
+OBG.get('/game/:asset_pack_id', <span class="fstat-no" title="function not covered" >function (req, res){</span>
+<span class="cstat-no" title="statement not covered" >	req.sanitize('asset_pack_id').toString();</span>
+<span class="cstat-no" title="statement not covered" >	db.get("SELECT * from asset_packs WHERE asset_pack_id='"+req.params.asset_pack_id+"';", <span class="fstat-no" title="function not covered" >function(err, ass_pk){</span></span>
+<span class="cstat-no" title="statement not covered" >		db.all("SELECT * FROM stars WHERE asset_pack_id='"+req.params.asset_pack_id+"';",<span class="fstat-no" title="function not covered" >function(err, stars){</span></span>
+<span class="cstat-no" title="statement not covered" >			var starsVal = 0;</span>
+<span class="cstat-no" title="statement not covered" >			for (var s = 0; s &lt; stars.length; s++)</span>
+<span class="cstat-no" title="statement not covered" >				starsVal += stars[s].rating;</span>
+<span class="cstat-no" title="statement not covered" >			if(stars.length == 0)</span>
+<span class="cstat-no" title="statement not covered" >				ass_pk.stars = 0;</span>
+			else
+<span class="cstat-no" title="statement not covered" >				ass_pk.stars = Math.floor(starsVal/stars.length);</span>
+<span class="cstat-no" title="statement not covered" >			db.all("SELECT user_id FROM subscriptions WHERE asset_pack_id='"+req.params.asset_pack_id+"';", <span class="fstat-no" title="function not covered" >function(err, subs){</span></span>
+				
+<span class="cstat-no" title="statement not covered" >				var is_subbed = false;</span>
+<span class="cstat-no" title="statement not covered" >				if(req.signedCookies.user){	</span>
+<span class="cstat-no" title="statement not covered" >					var user_id = JSON.parse(req.signedCookies.user).user_id;</span>
+<span class="cstat-no" title="statement not covered" >					for (var sub = 0; sub &lt; subs.length; sub++)</span>
+<span class="cstat-no" title="statement not covered" >						if(subs[sub].user_id == user_id)</span>
+<span class="cstat-no" title="statement not covered" >							is_subbed = true;</span>
+				}
+<span class="cstat-no" title="statement not covered" >				ass_pk.is_subbed = is_subbed;</span>
+<span class="cstat-no" title="statement not covered" >				ass_pk.count = subs.length;</span>
+<span class="cstat-no" title="statement not covered" >				db.all("SELECT image_url FROM images WHERE asset_pack_id='"+req.params.asset_pack_id+"';", <span class="fstat-no" title="function not covered" >function(err, imgs){</span></span>
+<span class="cstat-no" title="statement not covered" >					ass_pk.images = imgs;</span>
+<span class="cstat-no" title="statement not covered" >					console.log(ass_pk);</span>
+<span class="cstat-no" title="statement not covered" >					res.render('game', mergeUser(req.signedCookies.user, {nav:ass_pk.asset_pack_name, game:ass_pk}));</span>
+				});
+			});	
+		});	
+	});	
+ });
+//--------------------------------------------------------------------/////-upload asset page
+OBG.get('/upload', <span class="fstat-no" title="function not covered" >function (req, res){</span>
+<span class="cstat-no" title="statement not covered" >	if(req.signedCookies.user != undefined)</span>
+<span class="cstat-no" title="statement not covered" >		res.render('upload', mergeUser(req.signedCookies.user, {nav:"upload"}));</span>
+	else
+<span class="cstat-no" title="statement not covered" >		res.redirect("/auth?m=You need and account before you can upload games.");</span>
+ });
+//--------------------------------------------------------------------/////-create or sign in
+OBG.get('/auth', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	if(req.query.m == undefined)</span>
+<span class="cstat-no" title="statement not covered" >		if(req.signedCookies.user!=undefined)</span>
+<span class="cstat-no" title="statement not covered" >			res.render("auth", {nav:"signin", message:"Warning: You are already signed in to "+JSON.parse(req.signedCookies.user).user_name});</span>
+		else
+<span class="cstat-no" title="statement not covered" >			res.render("auth", {nav:"signin"});</span>
+	else{
+<span class="cstat-no" title="statement not covered" >		res.render("auth", {nav:"signin", message:req.query.m});</span>
+	}
+ });
+//--------------------------------------------------------------------/////-request to sign up
+OBG.post('/signup', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	req.sanitize('email').toString();</span>
+<span class="cstat-no" title="statement not covered" >	req.sanitize('username').toString();</span>
+<span class="cstat-no" title="statement not covered" >	req.sanitize('password').toString();</span>
+<span class="cstat-no" title="statement not covered" >	req.sanitize('confirm').toString();</span>
+<span class="cstat-no" title="statement not covered" >	var email = req.body.email.toLowerCase();</span>
+<span class="cstat-no" title="statement not covered" >	var username = req.body.username;</span>
+<span class="cstat-no" title="statement not covered" >	var password = req.body.password;</span>
+<span class="cstat-no" title="statement not covered" >	var confirm = req.body.confirm;</span>
+<span class="cstat-no" title="statement not covered" >	if(email.length == 0 || username.length == 0 || password.length == 0){ <span class="cstat-no" title="statement not covered" >authError("Please supply all necessary information.", res); <span class="cstat-no" title="statement not covered" ></span>return;}</span></span>
+<span class="cstat-no" title="statement not covered" >	if(password != confirm){ <span class="cstat-no" title="statement not covered" >authError("Passwords did not match.", res); <span class="cstat-no" title="statement not covered" ></span>return;}</span></span>
+<span class="cstat-no" title="statement not covered" >	db.serialize(<span class="fstat-no" title="function not covered" >function(){</span></span>
+<span class="cstat-no" title="statement not covered" >		db.get("SELECT * FROM users WHERE user_email='"+email+"';", <span class="fstat-no" title="function not covered" >function(err, user){</span></span>
+<span class="cstat-no" title="statement not covered" >			if(err){ <span class="cstat-no" title="statement not covered" >authError(err, res); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >			if(user!=undefined){ <span class="cstat-no" title="statement not covered" >authError("That email is already in use, did you &lt;a href='/forgot'&gt;forget your password?&lt;/a&gt;", res); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >			cryptPassword(password, <span class="fstat-no" title="function not covered" >function(err, hash){</span></span>
+<span class="cstat-no" title="statement not covered" >				if(err){ <span class="cstat-no" title="statement not covered" >authError("There was a password error", res); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >				db.run("INSERT INTO users (user_email, user_name) values('"+email+"', '"+username+"');", <span class="fstat-no" title="function not covered" >function(err){</span></span>
+<span class="cstat-no" title="statement not covered" >					if(err){ <span class="cstat-no" title="statement not covered" >authError(err, res); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >					db.get("SELECT user_id FROM users WHERE user_email='"+email+"' AND user_name='"+username+"';", <span class="fstat-no" title="function not covered" >function(err, user){</span></span>
+<span class="cstat-no" title="statement not covered" >						if(err){ <span class="cstat-no" title="statement not covered" >authError(err, res); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >						db.run("INSERT INTO passwords (user_id, hash) values('"+user.user_id+"', '"+hash+"');", <span class="fstat-no" title="function not covered" >function(err){</span></span>
+<span class="cstat-no" title="statement not covered" >							if(err){ </span>
+<span class="cstat-no" title="statement not covered" >								authError(err, res); </span>
+<span class="cstat-no" title="statement not covered" >								db.run("DELETE FROM users WHERE user_email='"+email+"' AND user_name='"+username+"';");</span>
+<span class="cstat-no" title="statement not covered" >								return;</span>
+							}
+<span class="cstat-no" title="statement not covered" >							emailTemplates(templatesDir, <span class="fstat-no" title="function not covered" >function(err, template){</span></span>
+<span class="cstat-no" title="statement not covered" >								var options = { url : user.user_id};</span>
+<span class="cstat-no" title="statement not covered" >								template('register', options, <span class="fstat-no" title="function not covered" >function(err, html){</span></span>
+<span class="cstat-no" title="statement not covered" >									mailer.sendMail({</span>
+										from: "surfaceRealms Account Registration &lt;surfacerealms.noreply@gmail.com&gt;", // sender address
+										to: username + "&lt;" + email + "&gt;", // comma separated list of receivers
+										subject: "Account Registration", // Subject line
+										html: html ,
+									}, <span class="fstat-no" title="function not covered" >function (mail_error, response){</span>
+<span class="cstat-no" title="statement not covered" >										if(mail_error){</span>
+<span class="cstat-no" title="statement not covered" >											db.get("DELETE FROM users WHERE user_email='"+email+"' AND user_name='"+username+"';");</span>
+<span class="cstat-no" title="statement not covered" >											db.get("DELETE FROM passwords WHERE user_id='"+user.user_id+"';");</span>
+<span class="cstat-no" title="statement not covered" >											console.log(mail_error);</span>
+<span class="cstat-no" title="statement not covered" >											authError("There was an error. Please try again.", res);</span>
+<span class="cstat-no" title="statement not covered" >											return;</span>
+										}
+<span class="cstat-no" title="statement not covered" >										console.log("sent mail");</span>
+<span class="cstat-no" title="statement not covered" >										res.redirect("/activate");</span>
+									});
+								});
+							});
+						});
+					});						
+				});
+			});
+		});
+	});
+ });
+//--------------------------------------------------------------------/////-request to sign in
+OBG.post('/signin', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	req.sanitize('email').toString();</span>
+<span class="cstat-no" title="statement not covered" >	req.sanitize('password').toString();</span>
+<span class="cstat-no" title="statement not covered" >	var email = req.body.email.toLowerCase();</span>
+<span class="cstat-no" title="statement not covered" >	var password = req.body.password;</span>
+<span class="cstat-no" title="statement not covered" >	console.log("signing in with: " + email + password);</span>
+<span class="cstat-no" title="statement not covered" >	db.serialize(<span class="fstat-no" title="function not covered" >function(){</span></span>
+<span class="cstat-no" title="statement not covered" >		db.get("SELECT * FROM users WHERE user_email='"+email+"';", <span class="fstat-no" title="function not covered" >function(err, user){</span></span>
+<span class="cstat-no" title="statement not covered" >			if(err){ <span class="cstat-no" title="statement not covered" >authError(err, res); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >			if(user==undefined){ <span class="cstat-no" title="statement not covered" >authError("That email is not in use.", res); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >			if(user.activated == false){ <span class="cstat-no" title="statement not covered" >authError("please, check your email to activate your account &lt;a href='/resend/"+email+"'&gt;Resend Token?&lt;/a&gt;", res); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >			db.get("SELECT * FROM passwords WHERE user_id='"+user.user_id+"';", <span class="fstat-no" title="function not covered" >function(err, pass){</span></span>
+<span class="cstat-no" title="statement not covered" >				if(err){ <span class="cstat-no" title="statement not covered" >authError(err, res); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >				if(pass==undefined){ <span class="cstat-no" title="statement not covered" >authError("No password is set for this account. Wait.. Wat?", res); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >				comparePassword(password, pass.hash, <span class="fstat-no" title="function not covered" >function(err, match){</span></span>
+<span class="cstat-no" title="statement not covered" >					if(err){ <span class="cstat-no" title="statement not covered" >authError(err, res); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >					if(match==false){ <span class="cstat-no" title="statement not covered" >authError("The password was not correct.", res); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >					res.cookie('user', JSON.stringify(user), {signed: true });</span>
+<span class="cstat-no" title="statement not covered" >					res.redirect("/");</span>
+				});
+			});
+		});
+	});
+ });
+//--------------------------------------------------------------------/////-logout / clear cookies
+OBG.get('/logout', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	res.clearCookie('user');</span>
+<span class="cstat-no" title="statement not covered" >	res.redirect('/');</span>
+ });
+//--------------------------------------------------------------------/////-you need to activate
+OBG.get('/activate', <span class="fstat-no" title="function not covered" >function(req, res){</span> <span class="cstat-no" title="statement not covered" >res.render("activate", {nav:""}); </span>});
+//--------------------------------------------------------------------/////-thanks for activating
+OBG.get('/activate/:user_id', <span class="fstat-no" title="function not covered" >function(req, res){ </span>
+<span class="cstat-no" title="statement not covered" >	req.sanitize('user_id').toString();</span>
+<span class="cstat-no" title="statement not covered" >	db.serialize(<span class="fstat-no" title="function not covered" >function(){</span></span>
+<span class="cstat-no" title="statement not covered" >		db.run("UPDATE users SET activated='true' WHERE user_id='"+req.params.user_id+"';", <span class="fstat-no" title="function not covered" >function(err){</span></span>
+<span class="cstat-no" title="statement not covered" >			res.render("activated", {nav:""});</span>
+		});
+	});
+ });
+//--------------------------------------------------------------------/////-add image, used in preview
+OBG.post('/image', <span class="fstat-no" title="function not covered" >function(req, res){ </span>
+<span class="cstat-no" title="statement not covered" >	var image_name = '/static/ass_img/'+uuid.v4().split('-')[0]+"."+req.files.image.originalFilename.split(".")[req.files.image.originalFilename.split(".").length-1];</span>
+<span class="cstat-no" title="statement not covered" >	fs.rename(req.files.image.path, __dirname + image_name, <span class="fstat-no" title="function not covered" >function(err){<span class="cstat-no" title="statement not covered" ></span>console.log(err);}</span>);</span>
+<span class="cstat-no" title="statement not covered" >	db.run('INSERT INTO images (image_url, user_id, asset_pack_id) VALUES("'+image_name+'","' + JSON.parse(req.signedCookies.user).user_id + '","'+ -1 + '");', <span class="fstat-no" title="function not covered" >function (err){</span></span>
+<span class="cstat-no" title="statement not covered" >		if(err)</span>
+<span class="cstat-no" title="statement not covered" >			res.send(500, {url:"static/img/error_img.png"});</span>
+		else
+<span class="cstat-no" title="statement not covered" >			res.send(200, {url:image_name});</span>
+	});
+ });
+//--------------------------------------------------------------------/////-delete image, keep serversize down
+OBG.post('/delimage', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	var image_name = __dirname + req.body.image;</span>
+<span class="cstat-no" title="statement not covered" >	fs.unlink(image_name, <span class="fstat-no" title="function not covered" >function(err){<span class="cstat-no" title="statement not covered" ></span>console.log(err);}</span>);</span>
+<span class="cstat-no" title="statement not covered" >	db.run('DELETE FROM images WHERE image_url="'+req.body.image+'";');</span>
+<span class="cstat-no" title="statement not covered" >	res.send(200, {});</span>
+ });
+//--------------------------------------------------------------------/////-add asset pack 
+OBG.post('/asset', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	var user = JSON.parse(req.signedCookies.user);</span>
+<span class="cstat-no" title="statement not covered" >	if(user==undefined){<span class="cstat-no" title="statement not covered" >res.redirect("/auth?m=You need to log in to upload games."); <span class="cstat-no" title="statement not covered" ></span>return}</span></span>
+	
+<span class="cstat-no" title="statement not covered" >	req.sanitize('ass_name').toString();</span>
+<span class="cstat-no" title="statement not covered" >	req.sanitize('add_desc').toString();</span>
+<span class="cstat-no" title="statement not covered" >	req.sanitize('ass_imgs').toString();</span>
+<span class="cstat-no" title="statement not covered" >	var name = req.body.ass_name;</span>
+<span class="cstat-no" title="statement not covered" >	var desc = req.body.ass_desc;</span>
+<span class="cstat-no" title="statement not covered" >	var imgs = req.body.ass_imgs;</span>
+<span class="cstat-no" title="statement not covered" >	var ass = uuid.v4().split('-')[0];</span>
+<span class="cstat-no" title="statement not covered" >	var ass_pk = '/static/ass_pks/'+ass+"_0.asspk";</span>
+	
+<span class="cstat-no" title="statement not covered" >	fs.rename(req.files.ass_pk.path, __dirname + ass_pk, <span class="fstat-no" title="function not covered" >function(err){<span class="cstat-no" title="statement not covered" ></span>console.log(err);}</span>);</span>
+<span class="cstat-no" title="statement not covered" >	db.serialize(<span class="fstat-no" title="function not covered" >function(){</span></span>
+<span class="cstat-no" title="statement not covered" >		db.run("INSERT INTO asset_packs (asset_pack_id, asset_pack_name, user_id, description) VALUES ('"+ass+"', '"+name+"', '"+user.user_id+"', '"+desc+"');", <span class="fstat-no" title="function not covered" >function(err){</span></span>
+<span class="cstat-no" title="statement not covered" >			if(err){<span class="cstat-no" title="statement not covered" >console.log(err); <span class="cstat-no" title="statement not covered" ></span>res.send(404, {}); <span class="cstat-no" title="statement not covered" ></span>return;}</span></span>
+<span class="cstat-no" title="statement not covered" >			db.run("INSERT INTO asset_version (asset_pack_id, asset_url, change_log, version) VALUES ('"+ass+"', '"+ass_pk+"', 'Initial Submission', 0);", <span class="fstat-no" title="function not covered" >function(err){</span></span>
+<span class="cstat-no" title="statement not covered" >				if(err){<span class="cstat-no" title="statement not covered" >console.log(err); <span class="cstat-no" title="statement not covered" ></span>res.send(404, {}); <span class="cstat-no" title="statement not covered" ></span>return;}</span></span>
+<span class="cstat-no" title="statement not covered" >				imgs = imgs.split("!");</span>
+<span class="cstat-no" title="statement not covered" >				for (var i = imgs.length - 1; i &gt;= 0; i--) {</span>
+<span class="cstat-no" title="statement not covered" >					db.run("UPDATE images SET asset_pack_id='"+ass+"' WHERE image_url='"+imgs[i]+"';");</span>
+				};
+<span class="cstat-no" title="statement not covered" >				res.redirect("/game/"+ass);</span>
+			});	
+		});
+	});
+ });
+//--------------------------------------------------------------------/////-set subscription
+OBG.post('/api/unsubscribe', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	console.log("unsub");</span>
+<span class="cstat-no" title="statement not covered" >	req.sanitize('asset_pk_id').toString();</span>
+<span class="cstat-no" title="statement not covered" >	var ass = req.body.ass_pk_id;</span>
+<span class="cstat-no" title="statement not covered" >	if(req.signedCookies.user==undefined){</span>
+<span class="cstat-no" title="statement not covered" >		res.send(403, {error:"user not signed in", url:"/auth?m=Sign in to subscribe to content!"});</span>
+<span class="cstat-no" title="statement not covered" >		return;</span>
+	}
+<span class="cstat-no" title="statement not covered" >	user = JSON.parse(req.signedCookies.user);</span>
+<span class="cstat-no" title="statement not covered" >	db.run("DELETE FROM subscriptions WHERE user_id='"+user.user_id+"' and asset_pack_id='"+ass+"';");</span>
+ });
+//--------------------------------------------------------------------/////-set unsubscription
+OBG.post('/api/subscribe', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	console.log("sub");</span>
+<span class="cstat-no" title="statement not covered" >	req.sanitize('asset_pk_id').toString();</span>
+<span class="cstat-no" title="statement not covered" >	var ass = req.body.ass_pk_id;</span>
+<span class="cstat-no" title="statement not covered" >	if(req.signedCookies.user==undefined){</span>
+<span class="cstat-no" title="statement not covered" >		res.send(403, {error:"user not signed in", url:"/auth?m=Sign in to subscribe to content!"});</span>
+<span class="cstat-no" title="statement not covered" >		return;</span>
+	}
+<span class="cstat-no" title="statement not covered" >	user = JSON.parse(req.signedCookies.user);</span>
+<span class="cstat-no" title="statement not covered" >	db.run("INSERT INTO subscriptions (user_id, asset_pack_id) VALUES('"+user.user_id+"', '"+ass+"');", <span class="fstat-no" title="function not covered" >function(err){</span></span>
+<span class="cstat-no" title="statement not covered" >		if(err) <span class="cstat-no" title="statement not covered" >res.send(400, {err:err});</span></span>
+		else <span class="cstat-no" title="statement not covered" >res.send(200, {});</span>
+	});
+ });
+//--------------------------------------------------------------------/////-remote login
+OBG.post('/api/login', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	if(req.body.email==undefined || req.body.password==undefined){</span>
+<span class="cstat-no" title="statement not covered" >		res.send(200, {success:false, error:"insufficient data"}); <span class="cstat-no" title="statement not covered" ></span>return;</span>
+	}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >	req.sanitize('email').toString();</span>
+<span class="cstat-no" title="statement not covered" >	req.sanitize('password').toString();</span>
+<span class="cstat-no" title="statement not covered" >	var email = req.body.email.toLowerCase();</span>
+<span class="cstat-no" title="statement not covered" >	var password = req.body.password;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >	db.serialize(<span class="fstat-no" title="function not covered" >function(){</span></span>
+<span class="cstat-no" title="statement not covered" >		db.get("SELECT * FROM users WHERE user_email='"+email+"';", <span class="fstat-no" title="function not covered" >function(err, user){</span></span>
+<span class="cstat-no" title="statement not covered" >			if(err){ <span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:err}); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >			if(user==undefined){ <span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:"email doesn't exist"}); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >			if(user.activated == false){ <span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:"not activated"}); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >			db.get("SELECT * FROM passwords WHERE user_id='"+user.user_id+"';", <span class="fstat-no" title="function not covered" >function(err, pass){</span></span>
+<span class="cstat-no" title="statement not covered" >				if(err){ <span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:err}); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >				if(pass==undefined){ <span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:"no password"}); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >				comparePassword(password, pass.hash, <span class="fstat-no" title="function not covered" >function(err, match){</span></span>
+<span class="cstat-no" title="statement not covered" >					if(err){ <span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:err}); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >					if(match!=true){ <span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:"password incorrect"}); <span class="cstat-no" title="statement not covered" ></span>return; </span>}</span>
+<span class="cstat-no" title="statement not covered" >					res.send(200, {success:true, "user":user});</span>
+				});
+			});
+		});
+	});
+ });
+//--------------------------------------------------------------------/////-start a server
+OBG.post('/api/server_start', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	var data = {</span>
+		server_name:req.body.server_name,
+		game_name:req.body.game_name,
+		max_num_players:req.body.max_num_players,
+		host_id:req.body.host_id,
+		server_passphrase:req.body.server_passphrase,
+		ip_address:req.headers['X-Real-IP'] || req.connection.remoteAddress
+	}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >console.log(req.headers);</span>
+<span class="cstat-no" title="statement not covered" >	var new_server = server(data);</span>
+<span class="cstat-no" title="statement not covered" >	serverMap[new_server.hashCode] = new_server;</span>
+<span class="cstat-no" title="statement not covered" >	res.send(200, {success:true, gid:new_server.hashCode});</span>
+<span class="cstat-no" title="statement not covered" >	cacheArrayValid = false;</span>
+<span class="cstat-no" title="statement not covered" >	updateCache();</span>
+ });
+//--------------------------------------------------------------------/////-keep a server alive
+OBG.post('/api/server_heartbeat', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	var pingtime = new Date().getTime() - req.connection._idleStart;</span>
+<span class="cstat-no" title="statement not covered" >	var gip = req.body.gid;</span>
+<span class="cstat-no" title="statement not covered" >	var num_players = req.body.num_players;</span>
+<span class="cstat-no" title="statement not covered" >	var ip = req.connection.remoteAddress;</span>
+<span class="cstat-no" title="statement not covered" >	if(gip==undefined || num_players==undefined) {<span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:"insufficient data"}); <span class="cstat-no" title="statement not covered" ></span>return}</span></span>
+<span class="cstat-no" title="statement not covered" >	if(serverMap[gip]!=undefined){</span>
+<span class="cstat-no" title="statement not covered" >		serverMap[gip].ip_address=ip;</span>
+<span class="cstat-no" title="statement not covered" >		var hash = serverMap[gip].hash();</span>
+<span class="cstat-no" title="statement not covered" >		if(hash != gip){</span>
+<span class="cstat-no" title="statement not covered" >			serverMap[hash] = serverMap[gip];</span>
+<span class="cstat-no" title="statement not covered" >			delete serverMap[gip];</span>
+<span class="cstat-no" title="statement not covered" >			cacheArrayValid = false;</span>
+<span class="cstat-no" title="statement not covered" >			updateCache();</span>
+		}
+<span class="cstat-no" title="statement not covered" >		serverMap[hash].ping();</span>
+<span class="cstat-no" title="statement not covered" >		serverMap[hash].num_players = num_players;</span>
+<span class="cstat-no" title="statement not covered" >		serverMap[hash].pingtime = pingtime;</span>
+<span class="cstat-no" title="statement not covered" >		res.send(200, {success:true, gip:hash});</span>
+	}else{
+<span class="cstat-no" title="statement not covered" >		res.send(200, {success:false, error:"not started, must ping every 5000ms or less"});</span>
+	}
+ });
+//--------------------------------------------------------------------/////-get server info
+OBG.get('/api/server/:serverhash', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	if(serverMap[req.params.serverhash]==undefined){</span>
+<span class="cstat-no" title="statement not covered" >		res.send(200, {success:false, error:"server does not exist"});</span>
+<span class="cstat-no" title="statement not covered" >		return;</span>
+	}
+<span class="cstat-no" title="statement not covered" >	res.send(200, {success:true, server:serverMap[serverhash]});</span>
+ });
+//--------------------------------------------------------------------/////-get server list
+OBG.get('/api/servers', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	if(cacheArrayValid)</span>
+<span class="cstat-no" title="statement not covered" >		res.send(200, {success:true, servers:cacheArray});</span>
+	else{
+<span class="cstat-no" title="statement not covered" >		updateCache(<span class="fstat-no" title="function not covered" >function(){</span></span>
+<span class="cstat-no" title="statement not covered" >			res.send(200, {success:true, servers:cacheArray})	</span>
+		})
+	}
+ });
+//--------------------------------------------------------------------/////-get subscriptions
+OBG.get('/api/subs/:user_id', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	var user_id = req.params.user_id;</span>
+<span class="cstat-no" title="statement not covered" >	db.get("SELECT * FROM users WHERE user_id='"+user_id+"';", <span class="fstat-no" title="function not covered" >function(err, user){</span></span>
+<span class="cstat-no" title="statement not covered" >		if(err || user == undefined){<span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:"user does not exist"}); <span class="cstat-no" title="statement not covered" ></span>return;}</span></span>
+<span class="cstat-no" title="statement not covered" >		db.all("SELECT asset_pack_id, asset_version_id FROM subscriptions WHERE user_id='"+user_id+"';", <span class="fstat-no" title="function not covered" >function(err, subs){</span></span>
+<span class="cstat-no" title="statement not covered" >			if(err){<span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:err}); <span class="cstat-no" title="statement not covered" ></span>console.log(err); <span class="cstat-no" title="statement not covered" ></span>return;}</span></span>
+<span class="cstat-no" title="statement not covered" >			if(subs == undefined) {<span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:"user does not exist"}); <span class="cstat-no" title="statement not covered" ></span>return;}</span></span>
+<span class="cstat-no" title="statement not covered" >			for (var i = 0; i &lt; subs.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >				if(subs[i].asset_version_id == null)</span>
+<span class="cstat-no" title="statement not covered" >					subs[i].download_url = "/api/asset/"+subs[i].asset_pack_id;</span>
+				else
+<span class="cstat-no" title="statement not covered" >					subs[i].download_url = "/api/asset/"+subs[i].asset_pack_id+"/"+subs[i].asset_version_id;</span>
+			};
+<span class="cstat-no" title="statement not covered" >			res.send(200, {success:true, subscriptions:subs});</span>
+		});
+	});
+ });
+//--------------------------------------------------------------------/////-download specific version of ass_pk
+OBG.get('/api/asset/:asset_pack_id/:asset_version_id', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	db.get("SELECT asset_url FROM asset_Version WHERE asset_pack_id='"+req.params.asset_pack_id+"' AND asset_version_id='"+req.params.asset_version_id+"';", <span class="fstat-no" title="function not covered" >function(err, asset){</span></span>
+<span class="cstat-no" title="statement not covered" >		if(err){<span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:err}); <span class="cstat-no" title="statement not covered" ></span>console.log(err); <span class="cstat-no" title="statement not covered" ></span>return;}</span></span>
+<span class="cstat-no" title="statement not covered" >		if(asset==undefined){<span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:"no such asset"}); <span class="cstat-no" title="statement not covered" ></span>return;}</span></span>
+<span class="cstat-no" title="statement not covered" >		res.sendfile(__dirname+asset.asset_url); </span>
+	});
+ });
+//--------------------------------------------------------------------/////-download newestof ass_pk
+OBG.get('/api/asset/:asset_pack_id/', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	db.get("SELECT asset_url FROM asset_Version WHERE asset_pack_id='"+req.params.asset_pack_id+"' ORDER BY version DESC LIMIT 1 ", <span class="fstat-no" title="function not covered" >function(err, asset){</span></span>
+<span class="cstat-no" title="statement not covered" >		if(err){<span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:err}); <span class="cstat-no" title="statement not covered" ></span>console.log(err); <span class="cstat-no" title="statement not covered" ></span>return;}</span></span>
+<span class="cstat-no" title="statement not covered" >		if(asset==undefined){<span class="cstat-no" title="statement not covered" >res.send(200, {success:false, error:"no such asset"});}</span></span>
+<span class="cstat-no" title="statement not covered" >		res.sendfile(__dirname+asset.asset_url); </span>
+	});
+ });
+//--------------------------------------------------------------------/////-api call not found
+OBG.get('/api/*', <span class="fstat-no" title="function not covered" >function(req, res){</span>
+<span class="cstat-no" title="statement not covered" >	res.send(200, {success:false, error:"API call not found"});</span>
+ });
+&nbsp;
+//404 Error start/////////////////////////////////////////////////////////////////////////
+OBG.get("*", <span class="fstat-no" title="function not covered" >function (req, res){</span>
+<span class="cstat-no" title="statement not covered" >	res.render('error', {</span>
+		"errorNumber":404,
+		"comment":"Sorry, you seem to have gone to page that does not exist.",
+		"nav":"Error"
+	});
+<span class="cstat-no" title="statement not covered" >	console.log("requested path: "+req.path);</span>
+ });
+//404 Error end/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+//Misc Start//////////////////////////////////////////////////////////////////////////////
+&nbsp;
+// merge two objects
+<span class="fstat-no" title="function not covered" >function merge(obj1, obj2){</span>
+<span class="cstat-no" title="statement not covered" >	for (var attrname in obj2) { <span class="cstat-no" title="statement not covered" >obj1[attrname] = obj2[attrname]; </span>}</span>
+<span class="cstat-no" title="statement not covered" >	return obj1;</span>
+ }
+<span class="fstat-no" title="function not covered" >function mergeUser(user, obj2){</span>
+<span class="cstat-no" title="statement not covered" >	if(typeof user == 'string') <span class="cstat-no" title="statement not covered" >user = JSON.parse(user);</span></span>
+<span class="cstat-no" title="statement not covered" >	if(typeof user == 'object'){</span>
+<span class="cstat-no" title="statement not covered" >		var obj1 = {"user":user};</span>
+<span class="cstat-no" title="statement not covered" >		for (var attrname in obj2) { <span class="cstat-no" title="statement not covered" >obj1[attrname] = obj2[attrname]; </span>}</span>
+<span class="cstat-no" title="statement not covered" >		return obj1;</span>
+	}
+<span class="cstat-no" title="statement not covered" >	return obj2;</span>
+ }
+var authError = <span class="fstat-no" title="function not covered" >function(e, res){</span>
+<span class="cstat-no" title="statement not covered" >	console.log(e);</span>
+<span class="cstat-no" title="statement not covered" >	res.redirect("/auth?m="+e);</span>
+ }
+var compare = <span class="fstat-no" title="function not covered" >function(a,b) {</span>
+  // if (a.last_nom &lt; b.last_nom)
+  //    return -1;
+  // if (a.last_nom &gt; b.last_nom)
+  //   return 1;
+<span class="cstat-no" title="statement not covered" >  return 0;</span>
+ }
+//Misc End//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+//consructors/////////////////////////////////////////////////////////////////////////////
+// server_name, game_name, max_num_players, host_id, ip_address, password
+var server = <span class="fstat-no" title="function not covered" >function(options){</span>
+<span class="cstat-no" title="statement not covered" >	var new_server = {};</span>
+<span class="cstat-no" title="statement not covered" >	for (var attrname in options)</span>
+<span class="cstat-no" title="statement not covered" >		new_server[attrname] = options[attrname];</span>
+<span class="cstat-no" title="statement not covered" >	if(options.server_passphrase==undefined)</span>
+<span class="cstat-no" title="statement not covered" >		delete new_server.server_passphrase;</span>
+<span class="cstat-no" title="statement not covered" >	new_server.hash = <span class="fstat-no" title="function not covered" >function(){</span></span>
+		
+<span class="cstat-no" title="statement not covered" >		new_server.hashCode = new_server.ip_address.replace(/[.]/g, "_");</span>
+<span class="cstat-no" title="statement not covered" >		return new_server.hashCode;</span>
+	}
+<span class="cstat-no" title="statement not covered" >	new_server.hash();</span>
+<span class="cstat-no" title="statement not covered" >	new_server.timeout = undefined;</span>
+<span class="cstat-no" title="statement not covered" >	new_server.ping = <span class="fstat-no" title="function not covered" >function(options){</span></span>
+<span class="cstat-no" title="statement not covered" >		clearTimeout(new_server.timeout);</span>
+<span class="cstat-no" title="statement not covered" >		for (var attrname in options)</span>
+<span class="cstat-no" title="statement not covered" >			new_server[attrname] = options[attrname];</span>
+<span class="cstat-no" title="statement not covered" >		new_server.timeout = setTimeout(<span class="fstat-no" title="function not covered" >function(){</span></span>
+<span class="cstat-no" title="statement not covered" >			new_server.remove();</span>
+		}, 5000);
+	}
+<span class="cstat-no" title="statement not covered" >	new_server.remove = <span class="fstat-no" title="function not covered" >function(){</span></span>
+<span class="cstat-no" title="statement not covered" >		delete serverMap[new_server.hashCode];</span>
+<span class="cstat-no" title="statement not covered" >		cacheArrayValid = false;</span>
+<span class="cstat-no" title="statement not covered" >		updateCache();</span>
+	}
+<span class="cstat-no" title="statement not covered" >	return new_server;</span>
+ }
+var cacheArray = new Array();
+var cacheArrayValid = true;
+var updateCache = <span class="fstat-no" title="function not covered" >function(callback){</span>
+<span class="cstat-no" title="statement not covered" >	cacheArray = new Array();</span>
+<span class="cstat-no" title="statement not covered" >	for(var hash in serverMap)</span>
+<span class="cstat-no" title="statement not covered" >		cacheArray.push(serverMap[hash]);</span>
+<span class="cstat-no" title="statement not covered" >	cacheArrayValid = true;</span>
+<span class="cstat-no" title="statement not covered" >	if(callback!=undefined)</span>
+<span class="cstat-no" title="statement not covered" >		callback();</span>
+ }
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Apr 09 2014 21:55:34 GMT-0500 (CDT)</div>
+</div>
+
+<script src="../prettify.js"></script>
+
+<script src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
+<script>
+
+    YUI().use('datatable', function (Y) {
+
+        var formatters = {
+          pct: function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              try {
+                  return o.value.toFixed(2) + '%';
+              } catch (ex) { return o.value + '%'; }
+          },
+          html: function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              return o.record.get(o.column.key + '_html');
+          }
+        },
+          defaultFormatter = function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              return o.value;
+          };
+
+        function getColumns(theadNode) {
+            var colNodes = theadNode.all('tr th'),
+                cols = [],
+                col;
+            colNodes.each(function (colNode) {
+                col = {
+                    key: colNode.getAttribute('data-col'),
+                    label: colNode.get('innerHTML') || ' ',
+                    sortable: !colNode.getAttribute('data-nosort'),
+                    className: colNode.getAttribute('class'),
+                    type: colNode.getAttribute('data-type'),
+                    allowHTML: colNode.getAttribute('data-html') === 'true' || colNode.getAttribute('data-fmt') === 'html'
+                };
+                col.formatter = formatters[colNode.getAttribute('data-fmt')] || defaultFormatter;
+                cols.push(col);
+            });
+            return cols;
+        }
+
+        function getRowData(trNode, cols) {
+            var tdNodes = trNode.all('td'),
+                    i,
+                    row = { classes: {} },
+                    node,
+                    name;
+            for (i = 0; i < cols.length; i += 1) {
+                name = cols[i].key;
+                node = tdNodes.item(i);
+                row[name] = node.getAttribute('data-value') || node.get('innerHTML');
+                row[name + '_html'] = node.get('innerHTML');
+                row.classes[name] = node.getAttribute('class');
+                //Y.log('Name: ' + name + '; Value: ' + row[name]);
+                if (cols[i].type === 'number') { row[name] = row[name] * 1; }
+            }
+            //Y.log(row);
+            return row;
+        }
+
+        function getData(tbodyNode, cols) {
+            var data = [];
+            tbodyNode.all('tr').each(function (trNode) {
+                data.push(getRowData(trNode, cols));
+            });
+            return data;
+        }
+
+        function replaceTable(node) {
+            if (!node) { return; }
+            var cols = getColumns(node.one('thead')),
+                data = getData(node.one('tbody'), cols),
+                table,
+                parent = node.get('parentNode');
+
+            table = new Y.DataTable({
+                columns: cols,
+                data: data,
+                sortBy: 'file'
+            });
+            parent.set('innerHTML', '');
+            table.render(parent);
+        }
+
+        Y.on('domready', function () {
+            replaceTable(Y.one('div.coverage-summary table'));
+            if (typeof prettyPrint === 'function') {
+                prettyPrint();
+            }
+        });
+    });
+</script>
+</body>
+</html>

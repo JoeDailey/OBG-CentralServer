@@ -1,14 +1,95 @@
 <%include part_head %>
-<div style="margin:30px;">
+<style type="text/css">
+	#git{
+		overflow-y: scroll;
+		padding-top:7px;
+		padding-bottom: 7px;
+		padding-right: 0px!important;
+	}
+	::-webkit-scrollbar { 
+	    display: block; 
+	}
+	.git-update{
+		visibility: visible;
+		padding: 10px;
+		background: rgba(0,0,0,0.7);
+	}
+	.update-user-image{
+		width: 50px;
+		height: 50px;
+		float: left;
+	}
+	.update-user-image img{
+		width: 100%;
+		margin-right: 7px;
+	}
+	.update-user-name{
+		color: white;
+		float:left;
+	}
+	.update-repo-name{
+		color:#4183c4;
+		text-decoration: none;
+		font-weight: 2em;
+	}
+	.update-repo-name:hover{
+		color:#5193d4;
+		text-decoration: none;
+		font-weight: 2em;
+	}
+	.action{
+		color:#dddddd;
+	}
+	.commit{
+		color:#eeeeee;
+		padding: 5px;
+		background:rgba(0,0,0,0.7);
+		border-radius: 4px;
+		border-left:3px solid rgba(225,220,220,0.5);
+		border-bottom:3px solid rgba(225,220,220,0.8);
+		display: table;
+	}
+	.time{
+		color:#eeeeee;
+		padding: 5px;
+		background:rgba(0,0,0,0.7);
+		border-radius: 4px;
+		border-right:3px solid rgba(225,220,220,0.8);
+		display: table;	
+	}
+	.report{
+		color: #fff;
+		text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+		background-color: #60b044;
+		background-image: -moz-linear-gradient(#8add6d, #60b044);
+		background-image: -webkit-linear-gradient(#8add6d, #60b044);
+		background-image: linear-gradient(#8add6d, #60b044);
+		background-repeat: repeat-x;
+		border-color: #5ca941;
+		font-size: 1.3em;
+	}
+	.report:hover{
+		background-color: #569e3d;
+		background-image: none;
+		border-color: #418737;
+		color: white;
+	}
+</style>
+<div style="margin:30px;" id="right-side">
 	<div class="col-sm-9 col-xs-12">
 		<% games.forEach(function(game) { %>
 			<%include part_asset_post %>
 		<% }); %>
 	</div>
-	<div class="col-sm-3 col-xs-12" style="background:black;">
+	<div class="col-sm-3 col-xs-12" style="background:black;" id="git">
+		<div>
+			<div style="width:50%;float:left;padding:2px;"><a class="btn report" style="width:100%;" href="https://github.com/phonyphonecall/AssetGenerator/issues">Report Suite Bug</a></div>
+			<div style="width:50%;float:left;padding:2px;"><a class="btn report" style="width:100%;" href="https://github.com/SpexGuy/OnlineBoardGame/issues">Report Game Bug</a></div>
+		</div>
 		<% updates.forEach(function(update) { %>
 			<%include part_git_update %>
 		<% }); %>
+		<div class="clearfix"></div>
 	</div>
 </div>
 <script>
@@ -16,6 +97,7 @@
 		setTimeout(function(){
 			$(".asset-star").css("color","white");
 		},200);
+		$("#git").height($(window).height()-125);
 	});
 </script>
 <%include part_foot %>
