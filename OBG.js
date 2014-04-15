@@ -224,6 +224,8 @@ var sendOff = function(req, res, gitevents, ass_pks){
 }
 //--------------------------------------------------------------------/////-find games page
 OBG.get('/matchmaking', function(req, res){
+
+	console.log(serverMap);
 	res.render('servers', mergeUser(req.signedCookies.user, {nav:"Servers", servers:serverMap}));
  });
 //--------------------------------------------------------------------/////-download clients
@@ -489,10 +491,12 @@ OBG.post('/api/server_start', function(req, res){
 		server_passphrase:req.body.server_passphrase,
 		ip_address:req.headers['X-Real-IP'] || req.connection.remoteAddress
 	}
+	if(data.server_name == undefined || data.game_name == undefined || data.max_num_players == undefined || data.host_id == undefined)
+		{res.send(200, {success:false, err:"insufficient data"}); return;}
 
-console.log(req.headers);
 	var new_server = server(data);
 	serverMap[new_server.hashCode] = new_server;
+	serverMap[new_server.hashCode].ping();
 	res.send(200, {success:true, gid:new_server.hashCode});
 	cacheArrayValid = false;
 	updateCache();
@@ -644,6 +648,7 @@ var server = function(options){
 			new_server[attrname] = options[attrname];
 		new_server.timeout = setTimeout(function(){
 			new_server.remove();
+			updateCache();
 		}, 5000);
 	}
 	new_server.remove = function(){

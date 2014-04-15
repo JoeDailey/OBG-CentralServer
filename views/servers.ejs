@@ -1,6 +1,47 @@
 <%include part_head %>
-
+<style type="text/css">
+	.server{
+		position: relative;
+		width: 98%;
+		margin-left: 2%;
+		background-color: rgba(0,0,0,0.7);
+		color: white;
+	}
+	.server:hover{
+		width: 100%;
+		margin-left: 0px;
+		height: auto;
+	}
+	.edge{
+		position: absolute;
+		background-color: white;
+		width: 1%;
+		height: 100%;
+		float: left;
+		margin-right:10px; 
+	}
+	.server-info{
+		padding: 10px;
+	}
+	.title-text{
+		font-size: 30px;
+		line-height: 30px;
+		padding-left: 1%;
+	}
+	.between-text{
+		font-size: 20px;
+		line-height: 30px;
+	}
+	.info-text{
+		float:right;
+	}
+	.join{
+		float:right;
+		border-radius: 0px;
+	}
+</style>
 <div class="content" style="padding:20px;">
+
 		<% for(var hash in servers) { %>
 		<%include part_server %>
 		<% } %>
