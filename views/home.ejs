@@ -57,7 +57,7 @@
 		border-right:3px solid rgba(225,220,220,0.8);
 		display: table;	
 	}
-	.report{
+	.updatebtn{
 		color: #fff;
 		text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
 		background-color: #60b044;
@@ -66,13 +66,18 @@
 		background-image: linear-gradient(#8add6d, #60b044);
 		background-repeat: repeat-x;
 		border-color: #5ca941;
+		border-size: 10px;
 		font-size: 1.3em;
+		width: 100%;
 	}
-	.report:hover{
+	.updatebtn:hover{
 		background-color: #569e3d;
 		background-image: none;
 		border-color: #418737;
 		color: white;
+	}
+	.btn{
+		white-space: normal!important;
 	}
 </style>
 <div style="margin:30px;" id="right-side">
@@ -83,8 +88,8 @@
 	</div>
 	<div class="col-sm-3 col-xs-12" style="background:black;" id="git">
 		<div>
-			<div style="width:50%;float:left;padding:2px;"><a class="btn report" style="width:100%;" href="https://github.com/phonyphonecall/AssetGenerator/issues">Report Suite Bug</a></div>
-			<div style="width:50%;float:left;padding:2px;"><a class="btn report" style="width:100%;" href="https://github.com/SpexGuy/OnlineBoardGame/issues">Report Game Bug</a></div>
+			<div style="width:50%;float:left;padding:2px;"><a class="btn updatebtn" href="https://github.com/phonyphonecall/AssetGenerator/issues">Report Suite Bug</a></div>
+			<div style="width:50%;float:left;padding:2px;"><a class="btn updatebtn" href="https://github.com/SpexGuy/OnlineBoardGame/issues">Report Game Bug</a></div>
 		</div>
 		<% updates.forEach(function(update) { %>
 			<%include part_git_update %>
@@ -98,6 +103,9 @@
 			$(".asset-star").css("color","white");
 		},200);
 		$("#git").height($(window).height()-125);
+		$(window).resize(function(){
+			$("#git").height($(window).height()-125);
+		});
 	});
 </script>
 <%include part_foot %>
