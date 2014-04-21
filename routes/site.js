@@ -2,7 +2,6 @@ var monthNames = [ "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December" ];
 
 exports.root = function (req, res){
-	console.log(req.signedCookies);
 	var gitevents = new Array();
 	var ass_pks;
 	var lock = 0;
@@ -74,7 +73,6 @@ exports.root = function (req, res){
 				if(err || stars==undefined) stars=new Array();
 				var starsVal = 0;
 				for (var s = 0; s < stars.length; s++) {
-					console.log("i-sloop"+s+": "+i);
 					starsVal += stars[s].rating;
 				}
 				if(stars.length == 0)
@@ -82,7 +80,6 @@ exports.root = function (req, res){
 				else
 					ass_pks.stars = Math.floor(starsVal/stars.length);
 				db.all("SELECT user_id FROM subscriptions WHERE asset_pack_id='"+ass_pk.asset_pack_id+"';", function(err, subs, i){
-					console.log(subs);
 					if(err){ console.log(err); subs = new Array() };
 					if(subs==undefined) subs = new Array();
 					var is_subbed = false;

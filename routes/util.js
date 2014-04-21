@@ -51,12 +51,14 @@ exports.merge = function(obj1, obj2){
  };
 
 exports.mergeUser = function(user, obj2){
-	if(user == undefined) return obj2;
+	if(user == undefined) console.log(obj2); return obj2;
 	if(typeof user == 'string') user = JSON.parse(user);
 	if(typeof user == 'object'){
 		var obj1 = {"user":user};
 		for (var attrname in obj2) { obj1[attrname] = obj2[attrname]; }
+		console.log("obj1", obj1);
 		return obj1;
 	}
+	console.log (obj2);
 	return obj2;
  };

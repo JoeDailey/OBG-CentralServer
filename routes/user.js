@@ -94,3 +94,8 @@ exports.logout = function(req, res){
 	res.clearCookie('user');
 	res.redirect('/');
  };
+
+exports.authError = function(e, res){
+	console.log(e);
+	res.redirect("/auth?m="+e);
+ };
